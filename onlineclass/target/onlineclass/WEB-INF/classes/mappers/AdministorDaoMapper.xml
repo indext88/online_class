@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http//mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace创建命名空间 -->
+<mapper namespace="com.onlineclass.dao.AdministorDao">
+	<!-- 显示或查询所有用户 -->
+
+	<!-- 查询user/student表的信息 -->
+	<resultMap id="AdminSel" type="com.onlineclass.pojo.User">
+		<!-- column是数据表中的,property是pojo的数据类型 -->
+		<id column="user_id" property="user_id" />
+		<result column="user_name" property="user_name" />
+		<result column="user_password" property="user_password" />
+		<result column="user_type" property="user_type" />
+	</resultMap>
+	<select id="AdminUser" resultMap="AdminSel">
+		SELECT * from user where
+		1=1
+		<if test="user_name!=''and user_name!=null">
+			and user.user_name=#{user_name}
+		</if>	
+		<if test="user_type!=''and user_type!=null">
+			and user.user_type=#{user_type}
+		</if>
+	</select>
+	<!-- 分页显示用户信息 -->
+	<select id="AdminUserPage" resultMap="AdminSel">
+		SELECT * from user where
+		1=1
+		<if test="user_name!=''and user_name!=null">
+			and user.user_name=#{user_name}
+		</if>
+		<if test="user_type!=''and user_type!=null">
+			and user.user_type=#{user_type}
+		</if>
+		limit ${(pageNo-1)*pageSize},${pageSize}
+	</select>
+	
+	<!-- 修改用户类型 -->
+	<update id="AdminUpdateUser" parameterType="User">
+	UPDATE user set user_type=#{user_type} where user_name=#{user_name}
+	</update>
+	<!-- 删除用户 -->
+	<delete id="AdminDelUser" parameterType="User">
+	DELETE  from user where user_name=#{user_name}
+	</delete>
+</mapper>

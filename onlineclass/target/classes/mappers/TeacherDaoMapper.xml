@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http//mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace创建命名空间 -->
+<mapper namespace="com.onlineclass.dao.TeacherDao">
+
+<resultMap id="TeacherPage" type="com.onlineclass.pojo.Teacher">
+		<!-- column是数据表中的,property是pojo的数据类型 -->
+			<id column="teacher_id" property="teacher_id" />
+			<result column="teacher_name" property="teacher_name" />
+			<result column="teacher_tno" property="teacher_tno" />
+			<result column="teacher_age" property="teacher_age" />
+			<result column="teacher_data" property="teacher_data" />
+			<result column="teacher_phone" property="teacher_phone" />
+			<result column="teacher_address" property="teacher_address" />
+		<collection property="course" column="course_cno"
+			select="getCourse" ofType="com.onlineclass.pojo.Course" />
+	</resultMap>
+
+<!-- 查询所有教师 -->
+<select id="SelTeacher" resultMap="TeacherPage">
+SELECT * from teacher,course where 1=1
+and
+teacher.teacher_course_id=course.course_cno
+<if test="teacher_name!='' and teacher_name!=''">
+and teacher_name like concat('%',#{teacher_name},'%')
+</if>
+<if test="teacher_tno!='' and teacher_tno!=null">
+and teacher_tno=#{teacher_tno}
+</if>
+</select>
+
+<!-- 分页查询所有教师 -->
+<select id="SelTeacherPage" resultMap="TeacherPage">
+SELECT * from teacher,course where 1=1
+and
+teacher.teacher_course_id=course.course_cno
+<if test="teacher_name!='' and teacher_name!=''">
+and teacher_name like concat('%',#{teacher_name},'%')
+</if>
+<if test="teacher_tno!='' and teacher_tno!=null">
+and teacher_tno=#{teacher_tno}
+</if>
+limit ${(pageNo-1)*pageSize},${pageSize}
+</select>
+
+
+
+
+<!-- 查询所有教师 -->
+<select id="SelTeacherss" resultMap="TeacherPage">
+SELECT * from teacher,course where 1=1
+and 
+teacher.teacher_course_id=course.course_cno
+and teacher.teacher_course_id=#{teacher_course_id}
+</select>
+
+
+
+
+
+<!-- 修改教师信息 -->
+<update id="UpdataTeacher" parameterType="Teacher">
+update teacher set teacher_name=#{teacher_name},teacher_tno=#{teacher_tno},teacher_age=#{teacher_age},teacher_data=#{teacher_data},teacher_phone=#{teacher_phone},
+teacher_address=#{teacher_address},teacher_course_id=#{teacher_course_id} where teacher_tno=#{teacher_tno}
+</update>
+
+<!-- 删除教师信息 -->
+<delete id="DelTeacher" parameterType="Teacher">
+DELETE  from teacher where 1=1 and teacher_tno=#{teacher_tno}
+</delete>
+
+<!-- 添加教师信息 -->
+<insert id="AddTeacher" parameterType="Teacher">
+INSERT into teacher(teacher_name,teacher_tno,teacher_age,teacher_data,teacher_phone,teacher_address,teacher_course_id) 
+values(#{teacher_name},#{teacher_tno},#{teacher_age},#{teacher_data},#{teacher_phone},#{teacher_address},#{teacher_course_id})
+</insert>
+
+<!-- 修改教师密码 -->
+<update id="UdateTeacherPwd" parameterType="User">
+UPDATE user set user_password=#{user_password} where user_name=#{user_name} and user_type=#{user_type}
+</update>
+
+<!-- 查询三个表的信息 -->
+	<resultMap id="TeacherChanges" type="com.onlineclass.pojo.Score">
+		<!-- column是数据表中的,property是pojo的数据类型 -->
+		<id column="score_id" property="score_id" />
+		<result column="score" property="scores" />
+		<collection property="student"
+			ofType="com.onlineclass.pojo.Student">
+			<id column="student_id" property="student_id" />
+			<result column="student_name" property="student_name" />
+			<result column="student_sno" property="student_sno" />
+			<result column="student_age" property="student_age" />
+			<result column="student_data" property="student_data" />
+			<result column="student_phone" property="student_phone" />
+			<result column="student_address" property="student_address" />
+			<result column="student_class" property="student_class" />
+		</collection>
+		<collection property="teacher"
+			ofType="com.onlineclass.pojo.Teacher" >
+			<id column="teacher_id" property="teacher_id" />
+			<result column="teacher_name" property="teacher_name" />
+			<result column="teacher_tno" property="teacher_tno" />
+			<result column="teacher_age" property="teacher_age" />
+			<result column="teacher_data" property="teacher_data" />
+			<result column="teacher_phone" property="teacher_phone" />
+			<result column="teacher_address" property="teacher_address" />
+		</collection>
+		<collection property="course" column="course_cno"
+			select="getCourse" ofType="com.onlineclass.pojo.Course" />
+			<!-- 
+		<association property="teacher" column="teacher_tno"
+			select="getTeacher" javaType="com.onlineclass.pojo.Teacher" />
+			 -->
+	</resultMap>
+	<!--显示成绩信息 -->
+	<select id="scoresTeacherChange" resultMap="TeacherChanges">
+		select * from score,student,teacher where 1=1
+		and score.teacher_tno=teacher.teacher_tno
+		and score.student_sno=student.student_sno
+		<if  test="teacher_tno!=''and teacher_tno!=null">
+		and score.teacher_tno=#{teacher_tno}
+		</if>
+		<if test="student_sno!=''and student_sno!=null">
+			and score.student_sno=#{student_sno}
+		</if>
+		<if test="student_name!=''and student_name!=null">
+			and student.student_name like concat('%',#{student_name},'%')
+		</if>
+		<if test="student_class!=''and student_class!=null">
+			and student.student_class like concat('%',#{student_class},'%')
+		</if>		
+	</select>
+	
+	<!--分页显示成绩信息 -->
+	<select id="scoresTeacherChangePage" resultMap="TeacherChanges">
+		select * from score,student,teacher where
+		score.student_sno=student.student_sno 
+		and score.teacher_tno=teacher.teacher_tno
+		and 1=1
+		<if  test="teacher_tno!=''and teacher_tno!=null">
+		and score.teacher_tno=#{teacher_tno}
+		</if>
+		<if test="student_sno!=''and student_sno!=null">
+			and score.student_sno=#{student_sno}
+		</if>
+		<if test="student_name!=''and student_name!=null">
+			and student.student_name like concat('%',#{student_name},'%')
+		</if>
+		<if test="student_class!=''and student_class!=null">
+			and student.student_class like concat('%',#{student_class},'%')
+		</if>
+		limit ${(pageNo-1)*pageSize},${pageSize}	
+	</select>
+
+	<!-- 查询课程所有信息 -->
+	<select id="getCourse" resultType="Course">
+		SELECT * from course where course_cno=#{course_cno}
+		and 1=1
+	</select>
+
+	<!-- 查询教师所有信息 -->
+	<select id="getTeacher" resultType="Teacher">
+		SELECT * from teacher where teacher_tno=#{teacher_tno}
+	</select>
+
+</mapper>

@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>教师管理</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <script type="text/javascript" src="http://v1.vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/iview@1.0.1/dist/iview.min.js"></script>
+    <script src="https://at.alicdn.com/t/font_1296423_92fclenj85a.js"></script>
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.bootcss.com/qs/6.6.0/qs.min.js"></script>
+</head>
+
+<body>
+    <style scoped>
+        html,
+        #app,
+        body {
+            padding: 0;
+            cursor:default
+        }
+
+        .layout {
+            border: 1px solid #d7dde4;
+            background: #f5f7f9;
+            position: relative;
+        }
+
+        .layout-breadcrumb {
+            padding: 10px 15px 0;
+        }
+
+        .layout-content {
+            height: 80vh;
+            margin: 15px;
+            overflow: hidden;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        .layout-content-main {
+            padding: 10px;
+        }
+
+        .layout-copy {
+            text-align: center;
+            padding: 10px 0 20px;
+            color: #9ea7b4;
+        }
+
+        .layout-menu-left {
+            background: #464c5b;
+        }
+
+        .layout-header {
+            height: 60px;
+            background: #fff;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+        }
+
+        .layout-logo-left {
+            width: 90%;
+            height: 30px;
+            background: #5b6270;
+            border-radius: 3px;
+            margin: 15px auto;
+            color: #d7dde4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px 0 10px;
+        }
+
+        .box_singal {
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(160, 160, 224, 0.3);
+        }
+
+        @font-face {
+            font-family: fontKai;
+            src: url('../font/kai.ttf');
+        }
+
+        .singal_name {
+            width: 40%;
+            height: 40px;
+            border: 1px solid rgb(117, 104, 104);
+            margin: 0 0 20px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+
+        }
+
+        .singal_name_title {
+            font-family: fontKai;
+            height: 39px;
+            width: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            background: rgba(7, 0, 0, 0.7);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .name_content {
+            display: flex;
+            flex: 1;
+            background: rgba(160, 160, 224, 0);
+            border: 0;
+            outline: none;
+            font-family: fontKai;
+            color: #333333;
+            font-size: 15px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+
+        .singal_stb,
+        .change_btn {
+            width: 150px;
+            height: 40px;
+            background: rgb(216, 47, 47);
+            color: aliceblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: fontKai;
+            color: rgb(228, 217, 217);
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .loss_form {
+            width: 30%;
+            height: 40%;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            animation: wj 0.1s;
+        }
+
+        .return_psw {
+            font-size: 30px;
+            color: #3B3B3B;
+            font-family: fontKai;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .box_return {
+            height: 30px;
+            width: 70%;
+            display: flex;
+            align-items: center;
+            font-family: myfont;
+            font-weight: bold;
+            border-bottom: 1px solid #333333;
+            margin: 10px 0 0 0;
+        }
+
+        .return_con {
+            outline: none;
+            border: 0;
+            font-family: myfont;
+            font-weight: bold;
+            margin: 0 0 3px 10px;
+        }
+
+
+        .er {
+            border: 1px solid rgba(120, 197, 233, 0.7);
+
+        }
+
+        .icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            margin: 0 0 3px 15px;
+        }
+
+        .change_btn {
+            margin: 20px 0 0 0;
+            background: #333333;
+            color: #fff;
+        }
+
+        .ss {
+            margin: 0 0 10px 0;
+        }
+
+        .search_box {
+            display: flex;
+            width: 39%;
+            height: 40px;
+            border: 1px solid #000;
+            padding: 0 0 0 10px;
+            border-radius: 5px;
+            font-family: fontKai;
+            margin: 15px 0 15px 6px;
+            justify-content: space-between;
+        }
+
+        .search_box>input {
+            width: 86%;
+            background: rgba(0, 0, 0, 0);
+            border: 0;
+            outline: none;
+            color: #333333;
+            font-weight: bold;
+            font-size: 15px;
+            letter-spacing: 1px;
+        }
+
+        .search_box>input::placeholder {
+            font-size: 12px;
+        }
+
+        .search_box img {
+            width: 30px;
+            height: 25px;
+        }
+
+        .sousuo {
+            height: 100%;
+            background: rgba(10, 32, 56, 0.8);
+            display: flex;
+            flex: 1;
+            border-radius: 0 4px 4px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 0 0 1px;
+        }
+
+        .box_title {
+            display: flex;
+            width: 99%;
+            height: 50px;
+            align-items: center;
+            background: rgba(10, 32, 56, 0.8);
+            border-radius: 5px;
+            margin: 0 auto;
+        }
+
+        .titleWid {
+            width: 17%;
+            color: #fff;
+            height: 50px;
+            border-left: 1px solid #EDEDED;
+            padding: 0 0 0 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .title_id {
+            background: #fff;
+            border-bottom: 1px solid #d7dde4;
+            color: #333333;
+        }
+
+        .qdxk {
+            width: 60%;
+            height: 60%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(238, 13, 13, 0.8);
+            color: #fff;
+            border-radius: 5px;
+            cursor: default;
+            font-size: 8px;
+        }
+
+        .title_tj {
+            background: #fff;
+            border-bottom: 1px solid #d7dde4;
+            color: #333333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .corse_btn {
+            display: flex;
+            align-items: center;
+            width: 18%;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            border-left: 1px solid #EDEDED;
+            color: #FFF;
+            padding-left: 10px;
+        }
+
+        .orse_con {
+            color: #000;
+            border: 0;
+        }
+
+        .orse_con>p {
+            height: 100%;
+        }
+
+        .fenye {
+            background: #fff;
+            height: 42px;
+            width: 99%;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 50px;
+            border: 1px solid #EDEDED;
+            margin: 0 auto;
+            border: 0;
+        }
+
+        .syy {
+            width: 60px;
+            height: 20px;
+            background: rgba(236, 19, 19, 1);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+            margin: 0 3px 0 0;
+        }
+
+        .xyy {
+            width: 60px;
+            height: 20px;
+            border: 1px solid rgb(236, 19, 19);
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+            margin: 0 0 0 3px;
+        }
+
+        .sure {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .sure_ {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .box_sure {
+            width: 41%;
+            height: 60%;
+            background: #FFF;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sure_title {
+            font-size: 30px;
+            font-weight: bold;
+            font-family: fontKai;
+            color: #000;
+
+        }
+
+        .sure_con {
+            display: flex;
+            justify-content: space-between;
+            width: 170px;
+            margin: 20px 0 0 0;
+        }
+
+        .sure_qd {
+            width: 70px;
+            height: 30px;
+            background: rgb(24, 11, 14);
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: default;
+        }
+
+        .sure_qx {
+            width: 70px;
+            height: 30px;
+            color: #000;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #000;
+            cursor: default;
+        }
+
+        .selet {
+            height: 100%;
+            width: 15%;
+        }
+
+        .selet>select {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            border: 0;
+            border-left: 1px solid rgb(29, 8, 8);
+            outline: none;
+            font-weight: bold;
+            color: rgb(54, 45, 45);
+        }
+        .option{
+            appearance: none;
+            background: rgba(0, 0, 0, 0);
+            height: 20px;
+            border: 1px solid #000;
+        }
+        .kecheng {
+            width: 47%;
+        }
+
+        .kecheng>input {
+            width: 70%;
+        }
+
+        .kecheng_img {
+            width: 15%;
+        }
+        .titleWid_x{
+            width: 25%;
+        }
+        .qdxk_er{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        .title_content {
+            display: flex;
+            font-family: fontKai;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+            font-weight: bolder;
+            color: #000;
+            letter-spacing: 3px;
+        }
+    </style>
+    <div id="app">
+        <div class="layout">
+            <Row type="flex">
+                <i-col span="5" class="layout-menu-left">
+                    <Menu active-key="2-1" theme="dark" width="auto" :open-keys="['2']">
+                        <div class="layout-logo-left">
+                        <p>{{lists.teacher_name}}</p>
+                            <p class="retut" @click='exit'>退出</p>
+                        </div>
+                        <Submenu key="1">
+                            <template slot="title">
+                                <Icon type="ios-navigate"></Icon>
+                                个人信息
+                            </template>
+                            <Menu-item key="1-1" @click='changeTitle(0,"个人信息","个人信息修改")'>个人信息修改</Menu-item>
+                            <Menu-item key="1-2" @click='changeTitle(1,"个人信息","密码修改")'>密码修改</Menu-item>
+                        </Submenu>
+                        <Submenu key="2">
+                            <template slot="title">
+                                <Icon type="ios-keypad"></Icon>
+                                课程信息
+                            </template>
+                            <Menu-item key="2-1" @click='queryCourse(2,"课程信息","选课课程信息查看")'>选课课程信息查看</Menu-item>
+                        </Submenu>
+                        <Submenu key="3">
+                            <template slot="title">
+                                <Icon type="ios-analytics"></Icon>
+                                成绩录入
+                            </template>
+                            <Menu-item key="3-1" @click='gradesAdd(3,"成绩录入","学生成绩管理")'>学生成绩管理</Menu-item>
+                        </Submenu>
+                    </Menu>
+                </i-col>
+                <i-col span="19">
+                    <div class="layout-header title_content">教师管理</div>
+                    <div class="layout-breadcrumb">
+                        <Breadcrumb>
+                            <Breadcrumb-item href="#">首页</Breadcrumb-item>
+                            <Breadcrumb-item href="#">{{title.title}}</Breadcrumb-item>
+                            <Breadcrumb-item>{{title.name}}</Breadcrumb-item>
+                        </Breadcrumb>
+                    </div>
+                    <div class="layout-content">
+                        <div class="layout-content-main">
+                            <div v-show="flagl===0" class="box_singal">
+                                <div class="return_psw ss">修改个人信息</div>
+                                <div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    名字
+                                </div>
+                                <input type="text " class="name_content " :value="lists.teacher_name" readonly v-model='lists.teacher_name'>
+                            </div>
+                            <div class="singal_name">
+                                    <div class=" singal_name_title ">
+                                    学号
+                                </div>
+                                <input type="text " class="name_content " :value="lists.teacher_tno" readonly v-model='lists.teacher_tno'>
+                            </div>
+                            <div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    年龄
+                                </div>
+                                <input type="text " class="name_content " :value="lists.teacher_age" readonly v-model='lists.teacher_age'>
+                            </div>
+                         
+                            <div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    出生日期
+                                </div>
+                                <input type="text " class="name_content " :value="lists.teacher_data" v-model='lists.teacher_data'>
+                            </div>
+							<div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    电话号码
+                                </div>
+                                <input type="text " class="name_content " :value="lists.teacher_phone" v-model='lists.teacher_phone'>
+                            </div>
+                            <div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    地址
+                                </div>
+                                <input type="text " class="name_content " :value="lists.teacher_address" v-model='lists.teacher_address'>
+                            </div>
+
+                            <div class="singal_stb" @click='sureChange'>确定修改
+                            </div>
+                        </div>
+                        <div v-show="flagl===1" class="box_singal">
+                            <div class="loss_form">
+                                <div class="return_psw">修改密码</div>
+                                <div class="box_return">
+                                    <svg class="icon re" aria-hidden="true">
+                                        <use xlink:href="#icon-mima-copy"></use>
+                                    </svg>
+                                    <input type="password" class="return_con" placeholder="新密码" v-model='resPwdf'>
+                                </div>
+                                <div class="box_return">
+                                    <svg class="icon re" aria-hidden="true">
+                                        <use xlink:href="#icon-mima-copy"></use>
+                                    </svg>
+                                    <input type="password" class="return_con" placeholder="确定新密码" v-model='resPwdt'>
+                                </div>
+                                <div class="change_btn" @click='resPwd'>确定</div>
+                            </div>
+                        </div>
+                        <div v-show="flagl===2" class="box_singal">
+                            <div style="width: 80%;height: 100%;">
+                            <div class="search_box kecheng">
+                                <input type="text" placeholder="请输入学号/姓名！" v-model='searchContent'>
+                                <div class="selet">
+                                    <select name="" id="" v-model='searchType'>
+                                        <option value="姓名" class="option">姓名</option>
+                                        <option value="学号" class="option">学号</option>
+                                        <option value="班级" class="option">班级</option>
+                                    </select>
+                                </div>
+                                <div class="sousuo kecheng_img" @click='search()'>
+                                    <img src="../img/sousuo.png" alt="">
+                                </div>
+                            </div>
+                            <div class=" box_title">
+                                    <div class="titleWid_x titleWid">学号</div>
+                                    <div class="titleWid_x titleWid">姓名</div>
+                                    <div class="titleWid_x titleWid">班级</div>
+                                    <div class="titleWid_x titleWid">课程名</div>
+                            </div>
+                                <div class=" box_title title_id " v-for="(index,item) in czs">
+                                        <p class="title_id titleWid titleWid_x">{{item.student.student_sno}}</p>
+                                        <p class="title_id titleWid titleWid_x">{{item.student.student_name}}</p>
+                                        <p class="title_id titleWid titleWid_x">{{item.student.student_class}}</p>
+                                        <p class="title_id titleWid titleWid_x">{{item.course.course_name}}</p>
+                                    </div>
+                                    <div class="corse_btn orse_con fenye">
+                                            <p class="syy" style="height: 20px;" @click='xksyy'>上一页</p>
+                                            <span>{{xkPage}}/</span>
+                                            <span>{{xkPageNo}}</span>
+                                            <p class="xyy" style="height: 20px;"  @click='xkxyy'>下一页</p>
+
+                                    </div>
+                            </div>
+                        </div>
+                        <div v-show=" flagl===3" class="box_singal">
+                                    <div style="width: 100%;height: 100%;">
+                                <div class="search_box kecheng">
+                                <input type="text" placeholder="请输入学号/姓名！" v-model='searchContent'>
+                                <div class="selet">
+                                    <select name="" id="" v-model='searchType'>
+                                        <option value="姓名" class="option">姓名</option>
+                                        <option value="学号" class="option">学号</option>
+                                        <option value="班级" class="option">班级</option>
+                                    </select>
+                                </div>
+                                <div class="sousuo kecheng_img" @click='search()'>
+                                    <img src="../img/sousuo.png" alt="">
+                                </div>
+                            </div>
+                            <div class=" box_title">
+                                                <div class="titleWid">学号</div>
+                                                <div class="titleWid">姓名</div>
+                                                <div class="titleWid">班级</div>
+                                                <div class="titleWid">课程名</div>
+                                                <div class="titleWid">成绩</div>
+                                                <div class="titleWid">操作</div>
+                                            </div>
+                                            <div class=" box_title title_id" v-for="(index,item) in czs">
+                                                <p class="title_id titleWid">{{item.student.student_sno}}</p>
+                                                <p class="title_id titleWid">{{item.student.student_name}}</p>
+                                                <p class="title_id titleWid">{{item.student.student_class}}</p>
+                                                <p class="title_id titleWid">{{item.course.course_name}}</p>
+                                                <p class="title_id titleWid">{{item.score}}</p>
+                                                <div class="title_id titleWid qdxk_er">
+                                                    <div class="qdxk" @click='go(index)'>修改信息</div>
+                                                </div>
+
+                                            </div>
+                                            <div class="corse_btn orse_con fenye">
+                                                <p class="syy" style="height: 20px;" @click='cxsyy'>上一页</p>
+                                                <span>{{cxPage}}/</span>
+                                            <span>{{cxPageNo}}</span>
+                                                <p class="xyy" style="height: 20px;" @click='cxxyy'>下一页</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                </i-col>
+            </Row>
+        </div>
+        <div :class="sure">
+            <div class="box_sure">
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        学号
+                    </div>
+                    <input type="text" class="name_content" :value="chang.student.student_sno" v-model="chang.student_sno" readonly>
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        姓名
+                    </div>
+                    <input type="text" class="name_content" :value="chang.student.student_name" v-model="chang.student_name" readonly>
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        班级
+                    </div>
+                    <input type="text" class="name_content" :value="chang.student.student_class" v-model="chang.student_class" readonly>
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        课程名
+                    </div>
+                    <input type="text" class="name_content" :value="chang.course.course_name" v-model="chang.course_name" readonly>
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        成绩
+                    </div>
+                    <input type="text" class="name_content" :value="chang.score" v-model="chang.score">
+                </div>
+
+                <div class="sure_con">
+                    <div class="sure_qd" @click='changeInfo()'>确定</div>
+                    <div class="sure_qx" @click='quxiao'>取消</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    flagl: 2,
+                    indexinfo: '',
+                    chang: {},
+                    searchType:'学号',
+                    searchContent:'',
+                    sure: 'sure_',
+                    home: '',
+                    title: {
+                        title: '课程信息',
+                        name: '选课课程信息查看'
+                    },
+                    czs: [],
+                    lists: [
+                       
+                    ],
+                    grades:[],
+                    userName:'',
+                    password:'',
+                    resPwdf:'',
+                    resPwdt:'',
+                    student_name:'',
+                    student_class:'',
+                    student_sno:'',
+                    xkPageNo:'',
+                    xkPage:1,
+                    cxPageNo:'',
+                    cxPage:1
+                    
+                }
+            },
+            methods: {
+                changeTitle(m, n, q) {
+                    console.log(this.flagl, q, n)
+                    this.flagl = m
+                    this.title.title = n
+                    this.title.name = q
+                },
+                
+                changeInfo() {
+                	var data= {
+                    	userName:this.chang.student_sno,
+                    	score:this.chang.score,
+                    	course_cno:this.czs[this.indexinfo].course.course_cno,
+                    }
+                	console.log(data)
+                	axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/teacher/teacherScore",
+                        transformRequest: [
+                            function (data) {
+                                // 对 data 进行任意转换处理
+                                return Qs.stringify(data);
+                            }
+                        ],
+                        data: {
+                        	userName:this.chang.student_sno,
+                        	score:this.chang.score,
+                        	course_cno:this.czs[this.indexinfo].course.course_cno,
+                        }
+                    }).then(result => {
+                       if(result.data){
+                    	   alert("修改成功")
+                           this.sure='sure_';
+                       }else{
+
+                    	   alert("修改失败")
+                       }
+                    })
+                },
+                go(index) {
+                    this.indexinfo = index;
+                    this.sure = "sure";
+                    this.chang=this.czs[index]
+                    console.log(this.chang,this.chang.course.course_name)
+                },
+                quxiao(){
+                    this.sure='sure_';
+                    
+                },
+                sureChange(){
+                	axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/teacher/teacherUpdateInformation",
+                        transformRequest: [
+                            function (data) {
+                                // 对 data 进行任意转换处理
+                                return Qs.stringify(data);
+                            }
+                        ],
+                        data: {
+                        	teacher_name:this.lists.teacher_name,
+                        	teacher_tno:this.lists.teacher_tno,
+                        	teacher_data:this.lists.teacher_data,
+                        	teacher_phone:this.lists.teacher_phone,
+                        	teacher_address:this.lists.teacher_address,
+                        	teacher_course_id:this.lists.teacher_course_id,
+                        }
+                    }).then(result => {
+                       if(result.data){
+                    	   alert("修改成功")
+                       }
+                    })
+                },
+                resPwd(){
+                	if(this.resPwdf!=""){
+                	if(this.resPwdf===this.resPwdt){
+                		var pwd=this.resPwdt
+                	}else{
+                		alert("请输入相同密码")
+                	}
+                	}else{
+                		alert("密码不能为空")
+                	}
+                	 axios({
+                         method: "post",
+                         changeOrigin: "true",
+                         url: "/user/updataPassword",
+                         transformRequest: [
+                             function (data) {
+                                 // 对 data 进行任意转换处理
+                                 return Qs.stringify(data);
+                             }
+                         ],
+                         data: {
+                        	 userName:this.userName,
+                        	 userPassword:pwd,
+                        	 usertype:"教师"
+                         	}
+                     }).then(result => {
+                        if(result.data){
+                        	alert("修改成功")
+                        }
+                        
+                     })
+                },
+                exit(){
+                	window.location.href='/exit'
+                },
+                queryCourse(m,n,q){
+                	this.flagl = m
+                    this.title.title = n
+                    this.title.name = q
+                    
+                    axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/teacher/teacherChange",
+                        transformRequest: [
+                            function (data) {
+                                // 对 data 进行任意转换处理
+                                return Qs.stringify(data);
+                            }
+                        ],
+                        data: {
+                        	teacher_tno:this.userName,
+                        	student_name:"",
+                        	student_class:"",
+                        	student_sno:"",
+                        	pageNopss:this.xkPage                        }
+                    }).then(result => {
+                       this.czs=result.data.score
+                       this.xkPageNo=result.data.pageNo
+                       console.log(result.data,result.data.pageNo)
+                    })
+                },
+                search(){
+                	this.xkPage=1
+                	this.cxPage=1
+                	console.log(this.searchContent,this.searchType)
+                	if(this.searchType=="学号"){
+                		this.student_sno=this.searchContent
+                		this.student_name=""
+                		this.student_class=""
+                	}else if(this.searchType=="班级"){
+                		this.student_sno=""
+                		this.student_name=""
+                		this.student_class=this.searchContent
+                	}else if(this.searchType=="姓名"){
+                		this.student_sno=""
+                    	this.student_name=this.searchContent
+                    	this.student_class=""
+                	}
+                	var data={
+                        	teacher_tno:this.userName,
+                        	student_name:this.student_name,
+                        	student_class:this.student_class,
+                        	student_sno:this.student_sno,
+                        	pageNopss:this.xkPage   
+                        }
+                	console.log(data)
+                	axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/teacher/teacherChange",
+                        transformRequest: [
+                            function (data) {
+                                // 对 data 进行任意转换处理
+                                return Qs.stringify(data);
+                            }
+                        ],
+                        data: {
+                        	teacher_tno:this.userName,
+                        	student_name:this.student_name,
+                        	student_class:this.student_class,
+                        	student_sno:this.student_sno,
+                        	pageNopss:this.xkPage    
+                        }
+                    }).then(result => {
+                       this.czs=result.data.score
+                       this.cxPageNo=result.data.pageNo
+                    })
+                },
+                gradesAdd(m,n,q){
+                	this.flagl = m
+                    this.title.title = n
+                    this.title.name = q
+                    axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/teacher/teacherChange",
+                        transformRequest: [
+                            function (data) {
+                                // 对 data 进行任意转换处理
+                                return Qs.stringify(data);
+                            }
+                        ],
+                        data: {
+                        	teacher_tno:this.userName,
+                        	student_name:"",
+                        	student_class:"",
+                        	student_sno:"",
+                        	pageNopss:this.xkPage       
+                        }
+                    }).then(result => {
+                       this.czs=result.data.score
+                       this.cxPageNo=result.data.pageNo
+                       console.log(result.data)
+                    })
+                },
+                xksyy(){
+                	this.xkPage-=1
+                	if(this.xkPage<=1){
+                		this.xkPage=1
+                	}
+                	axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/teacher/teacherChange",
+                        transformRequest: [
+                            function (data) {
+                                // 对 data 进行任意转换处理
+                                return Qs.stringify(data);
+                            }
+                        ],
+                        data: {
+                        	pageNopss:this.xkPage,
+                        	teacher_tno:this.userName,
+                        	student_name:this.student_name,
+                        	student_class:this.student_class,
+                        	student_sno:this.student_sno
+                        }
+                    }).then(result => {
+                       this.items=result.data.score
+                       this.xkPageNo=result.data.pageNo
+                       console.log(result.data)
+                    })
+                },
+                xkxyy(){
+                	this.xkPage+=1
+                	if(this.xkPage>this.xkPageNo){
+                		this.xkPage=this.xkPageNo
+                	}
+                	axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/teacher/teacherChange",
+                        transformRequest: [
+                            function (data) {
+                                // 对 data 进行任意转换处理
+                                return Qs.stringify(data);
+                            }
+                        ],
+                        data: {
+                        	pageNopss:this.xkPage,
+                        	teacher_tno:this.userName,
+                        	student_name:this.student_name,
+                        	student_class:this.student_class,
+                        	student_sno:this.student_sno
+                        }
+                    }).then(result => {
+                       this.czs=result.data.score
+                       this.xkPageNo=result.data.pageNo
+                       console.log(result.data)
+                    })
+                    var data={
+                		pageNopss:this.xkPage,
+                    	teacher_tno:this.userName,
+                    	student_name:this.student_name,
+                    	student_class:this.student_class,
+                    	student_sno:this.student_sno
+                	}
+                    console.log(data)
+                },
+                cxxyy(){
+                	this.cxPage+=1
+                	if(this.cxPage>this.cxPageNo){
+                		this.cxPage=this.cxPageNo
+                	}
+                	axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/teacher/teacherChange",
+                        transformRequest: [
+                            function (data) {
+                                // 对 data 进行任意转换处理
+                                return Qs.stringify(data);
+                            }
+                        ],
+                        data: {
+                        	pageNopss:this.cxPage,
+                        	teacher_tno:this.userName,
+                        	student_name:this.student_name,
+                        	student_class:this.student_class,
+                        	student_sno:this.student_sno
+                        }
+                    }).then(result => {
+                        this.czs=result.data.score
+                        this.cxPageNo=result.data.pageNo
+                       console.log(result.data)
+                    })
+                },
+                cxsyy(){
+                	this.cxPage-=1
+                	if(this.cxPage<=1){
+                		this.cxPage=1
+                	}
+                	axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/teacher/teacherChange",
+                        transformRequest: [
+                            function (data) {
+                                // 对 data 进行任意转换处理
+                                return Qs.stringify(data);
+                            }
+                        ],
+                        data: {
+                        	pageNopss:this.cxPage,
+                        	teacher_tno:this.userName,
+                        	student_name:this.student_name,
+                        	student_class:this.student_class,
+                        	student_sno:this.student_sno
+                        }
+                    }).then(result => {
+                        this.czs=result.data.score
+                        this.cxPageNo=result.data.pageNo
+                        console.log(result.data)
+                    })
+                },
+            },
+            
+            
+            created() {
+            	this.userName=localStorage.getItem("userName")
+                this.password=localStorage.getItem("password")
+            	axios({
+                    method: "post",
+                    changeOrigin: "true",
+                    url: "/teacher/teacherInformation",
+                    transformRequest: [
+                        function (data) {
+                            // 对 data 进行任意转换处理
+                            return Qs.stringify(data);
+                        }
+                    ],
+                    data: {
+                    	student_name:'',
+                    	userName:this.userName
+                    }
+                }).then(result => {
+                   this.lists=result.data[0]
+                   console.log(result.data[0])
+                   console.log(this.userName,this.password)
+                })
+                axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/teacher/teacherChange",
+                        transformRequest: [
+                            function (data) {
+                                // 对 data 进行任意转换处理
+                                return Qs.stringify(data);
+                            }
+                        ],
+                        data: {
+                        	teacher_tno:this.userName,
+                        	student_name:"",
+                        	student_class:"",
+                        	student_sno:"",
+                        	pageNopss:this.xkPage                        }
+                    }).then(result => {
+                       this.czs=result.data.score
+                       this.xkPageNo=result.data.pageNo
+                       console.log(result.data,result.data.pageNo)
+                    })
+            }
+
+        })
+    </script>
+</body>
+
+</html>

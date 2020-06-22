@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>学生管理</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <script type="text/javascript" src="http://v1.vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/iview@1.0.1/dist/iview.min.js"></script>
+    <script src="https://at.alicdn.com/t/font_1296423_92fclenj85a.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.bootcss.com/qs/6.6.0/qs.min.js"></script>
+</head>
+
+<body>
+    <style>
+        #app,
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width:100%;
+            height:100%;
+            cursor:default
+        }
+
+        .layout {
+            border: 1px solid #d7dde4;
+            background: #f5f7f9;
+            position: relative;
+        }
+
+        .layout-breadcrumb {
+            padding: 10px 15px 0;
+        }
+
+        .layout-content {
+            height: 83vh;
+            margin: 15px;
+            overflow: hidden;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        .layout-content-main {
+            padding: 10px;
+        }
+
+        .layout-copy {
+            text-align: center;
+            padding: 10px 0 20px;
+            color: #9ea7b4;
+        }
+
+        .layout-menu-left {
+            background: #464c5b;
+        }
+
+        .layout-header {
+            height: 60px;
+            background: #fff;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+        }
+
+        .layout-logo-left {
+            width: 90%;
+            height: 30px;
+            background: #5b6270;
+            border-radius: 3px;
+            margin: 15px auto;
+            color: #d7dde4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px 0 10px;
+        }
+
+        .box_singal {
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(160, 160, 224, 0.3);
+        }
+
+        @font-face {
+            font-family: fontKai;
+            src: url('../font/kai.ttf');
+        }
+
+        .singal_name {
+            width: 40%;
+            height: 40px;
+            border: 1px solid rgb(117, 104, 104);
+            margin: 0 0 20px 0;
+            border-radius: 5px;
+            display: flex;
+
+        }
+
+        .singal_name_title {
+            font-family: fontKai;
+            height: 39px;
+            width: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            background: rgba(7, 0, 0, 0.7);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .name_content {
+            display: flex;
+            flex: 1;
+            background: rgba(160, 160, 224, 0);
+            border: 0;
+            outline: none;
+            font-family: fontKai;
+            color: #333333;
+            font-size: 15px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+
+        .singal_stb,
+        .change_btn {
+            width: 150px;
+            height: 40px;
+            background: rgb(216, 47, 47);
+            color: aliceblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: fontKai;
+            color: rgb(228, 217, 217);
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .loss_form {
+            width: 30%;
+            height: 40%;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            animation: wj 0.1s;
+        }
+
+        .return_psw {
+            font-size: 30px;
+            color: #3B3B3B;
+            font-family: fontKai;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .box_return {
+            height: 30px;
+            width: 70%;
+            display: flex;
+            align-items: center;
+            font-family: myfont;
+            font-weight: bold;
+            border-bottom: 1px solid #333333;
+            margin: 10px 0 0 0;
+        }
+
+        .return_con {
+            outline: none;
+            border: 0;
+            font-family: myfont;
+            font-weight: bold;
+            margin: 0 0 3px 10px;
+        }
+
+
+        .er {
+            border: 1px solid rgba(120, 197, 233, 0.7);
+
+        }
+
+        .icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            margin: 0 0 3px 15px;
+        }
+
+        .change_btn {
+            margin: 20px 0 0 0;
+            background: #333333;
+            color: #fff;
+        }
+
+        .ss {
+            margin: 0 0 10px 0;
+        }
+
+        .title_content {
+            display: flex;
+            font-family: fontKai;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+            font-weight: bolder;
+            color: #000;
+            letter-spacing: 3px;
+        }
+
+        .retut {
+            border-bottom: 1px solid #fff;
+        }
+
+        .corse_title {
+            display: flex;
+            width: 100%;
+            justify-content: flex-start;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .box_corse_title {
+            display: flex;
+            width: 99%;
+            background: rgba(10, 32, 56, 0.8);
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        .corse_btn {
+            display: flex;
+            align-items: center;
+            width: 18%;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            border-left: 1px solid #EDEDED;
+            color: #FFF;
+            padding-left: 10px;
+        }
+
+        .corse_content {
+            width: 38%;
+            border-left: 1px solid #EDEDED;
+            display: flex;
+            align-items: center;
+            color: #FFF;
+            padding-left: 10px;
+            overflow: auto;
+
+        }
+
+        .qdxk {
+            width: 60%;
+            height: 60%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: crimson;
+            color: #fff;
+            border-radius: 5px;
+            cursor: default;
+            font-size: 8px;
+        }
+
+        .box_qdxk {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            border: 1px solid rgb(160, 160, 224);
+            padding: 0;
+            width: 8%;
+        }
+
+        .xk {
+            display: none;
+        }
+
+        .xk+label {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 1px solid #fabd38;
+            border-radius: 50%;
+        }
+
+        .xk:checked+label {
+            content: url();
+            ;
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 1px solid #fabd38;
+            background: #fabd38;
+        }
+
+        .corse_tea {
+            width: 10%;
+        }
+
+        .box_corse_con {
+            background: rgb(255, 255, 255);
+            display: flex;
+            width: 99%;
+            color: #000;
+            border-bottom: 1px solid #d7dde4;
+            align-items: center;
+        }
+
+        .orse_con {
+            color: #000;
+            border: 0;
+        }
+
+        .orse_con>p {
+            height: 100%;
+        }
+
+        .qdxk_er {
+            border: 0;
+        }
+
+        .fenye {
+            background: #fff;
+            height: 42px;
+            width: 99%;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 50px;
+            border: 1px solid #EDEDED;
+        }
+
+        .syy {
+            width: 60px;
+            height: 20px;
+            background: rgba(236, 19, 19, 1);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+            margin: 0 3px 0 0;
+        }
+
+        .xyy {
+            width: 60px;
+            height: 20px;
+            border: 1px solid rgb(236, 19, 19);
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+            margin: 0 0 0 3px;
+        }
+
+        .cox_co {
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .cox_co::-webkit-scrollbar {
+            display: none;
+        }
+
+        .xh {
+            width: 8%;
+        }
+
+        .xh_con {
+            display: flex;
+            justify-content: flex-start;
+            padding: 0 0 0 13px;
+        }
+
+        .cj_title {
+            width: 70%;
+            height: 50px;
+            background: rgba(10, 32, 56, 0.8);
+            display: flex;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .cj_title>p {
+            width: 50%;
+            height: 100%;
+            border-left: 1px solid #EDEDED;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-family: fontKai;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .cj_content {
+            border-radius: 0;
+        }
+
+        .cj_content p {
+            background: rgba(255, 255, 255, 1);
+            color: #333333;
+            border-bottom: 1px solid #d7dde4;
+        }
+
+        .sure {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .sure_ {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .box_sure {
+            width: 300px;
+            height: 200px;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sure_title {
+            font-size: 30px;
+            font-weight: bold;
+            font-family: fontKai;
+            color: #000;
+
+        }
+
+        .sure_con {
+            display: flex;
+            justify-content: space-between;
+            width: 170px;
+            margin: 20px 0 0 0;
+        }
+
+        .sure_qd {
+            width: 70px;
+            height: 30px;
+            background: rgb(24, 11, 14);
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: default;
+        }
+
+        .sure_qx {
+            width: 70px;
+            height: 30px;
+            color: #000;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #000;
+            cursor: default;
+        }
+        .box_xk_table{
+        width:90%;
+        margin-left:320px;
+        
+        }
+        .box_tr{
+        width:100%;
+        display:flex;
+        }
+        .box_td{
+        	width:14%;
+        	height:100px;
+        	border:1px solid #000;
+        	display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .cccccc{
+        	background:rgba(0,0,0,0);
+        	border:0;
+        	font-size:15px;
+        	color:#333;
+        	font-weight:bold;
+        	width:50px;
+        	text-align:center;
+        	width:100%;
+        	outline:none;
+        }
+        .kebiao_title{
+        	display: flex;
+        	width:90%;
+        	margin:35px 0 0 0;
+        	margin-left:320px;
+        }
+        .kebiao_title div{
+        	width:14%;
+        	border:1px solid #000;
+        	height:50px;
+        	font-size:17px;
+        	font-weight:bold;
+        	display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .table_weizhi{
+        margin-left:100px;
+        }
+    </style>
+    <div id="app" @click='app()'>
+        <div class="layout">
+            <Row type="flex">
+                <i-col span="5" class="layout-menu-left">
+                    <Menu active-key="2-1" theme="dark" width="auto" :open-keys="['2']">
+                        <div class="layout-logo-left">
+                            <p>{{lists.student_name}}</p>
+                            <p class="retut" @click='exit'>退出</p>
+                        </div>
+                        <Submenu key="1">
+                            <template slot="title">
+                                <Icon type="ios-navigate"></Icon>
+                                用户管理					
+                            </template>
+                            <Menu-item key="1-1" @click='changeTitle(0,"用户管理","个人信息")'>个人信息</Menu-item>
+                            <Menu-item key="1-2" @click='changeTitle(1,"用户管理","修改密码")'>修改密码</Menu-item>
+                        </Submenu>
+                        <Submenu key="2">
+                            <template slot="title">
+                                <Icon type="ios-keypad"></Icon>
+                                选课
+                            </template>
+                            <Menu-item key="2-1" @click='chooseCourse(2,"选课","课程选择")'>课程选择</Menu-item>
+                            <Menu-item key="2-2" @click='courseIn(3,"选课","选课信息")'>选课信息</Menu-item>
+                        </Submenu>
+                        <Submenu key="3">
+                            <template slot="title">
+                                <Icon type="ios-keypad"></Icon>
+                                成绩
+                            </template>
+                            <Menu-item key="3-1" @click='courseInfo(4,"成绩","成绩查看")'>成绩查看</Menu-item>
+                        </Submenu>
+                    </Menu>
+                </i-col>
+                <i-col span="19">
+                    <div class="layout-header title_content">学生管理</div>
+                    <div class="layout-breadcrumb">
+                        <Breadcrumb>
+                            <Breadcrumb-item>首页</Breadcrumb-item>
+                            <Breadcrumb-item>{{title}}</Breadcrumb-item>
+                            <Breadcrumb-item>{{name}}</Breadcrumb-item>
+                        </Breadcrumb>
+                    </div>
+                    <div class="layout-content">
+                        <div class="layout-content-main">
+                            <div v-show="flag===0" class="box_singal">
+                                <div class="return_psw ss">修改个人信息</div>
+                                <div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    名字
+                                </div>
+                                <input type="text " class="name_content " :value="lists.student_name" readonly v-model='lists.student_name'>
+                            </div>
+                            <div class="singal_name">
+                                    <div class=" singal_name_title ">
+                                    学号
+                                </div>
+                                <input type="text " class="name_content " :value="lists.student_sno" readonly v-model='lists.student_sno'>
+                            </div>
+                            <div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    年龄
+                                </div>
+                                <input type="text " class="name_content " :value="lists.student_age" readonly v-model='lists.student_age'>
+                            </div>
+                         <div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    班级
+                                </div>
+                                <input type="text " class="name_content " :value="lists.student_class" v-model='lists.student_class' readonly>
+                            </div>
+                            <div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    出生日期
+                                </div>
+                                <input type="text " class="name_content " :value="lists.student_data" v-model='lists.student_data'>
+                            </div>
+							<div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    电话号码
+                                </div>
+                                <input type="text " class="name_content " :value="lists.student_phone" v-model='lists.student_phone'>
+                            </div>
+                            <div class="singal_name" >
+                                    <div class=" singal_name_title ">
+                                    地址
+                                </div>
+                                <input type="text " class="name_content " :value="lists.student_address" v-model='lists.student_address'>
+                            </div>
+                            <div class="singal_stb " @click='sureInfo'>确定修改
+                            </div>
+                        </div>
+                        <div class="box_singal " v-show="flag===1 ">
+                            <div class="loss_form ">
+                                <div class="return_psw ">修改密码</div>
+                                <div class="box_return ">
+                                    <svg class="icon re " aria-hidden="true ">
+                                        <use xlink:href="#icon-mima-copy "></use>
+                                    </svg>
+                                    <input type="password" class="return_con " placeholder="新密码 " v-model='resPwdf'>
+                                </div>
+                                <div class="box_return ">
+                                    <svg class="icon re " aria-hidden="true ">
+                                        <use xlink:href="#icon-mima-copy "></use>
+                                    </svg>
+                                    <input type="password" class="return_con " placeholder="确定新密码 " v-model='resPwdt'>
+                                </div>
+                                <div class="change_btn " @click='resPwd'>确定</div>
+                            </div>
+                        </div>
+                        <div class="box_singal corse_title " v-show="flag===2 ">
+                            <div class="box_corse_title ">
+                                <div class="corse_btn box_qdxk ">
+                                    <div class="qdxk " @click='sure="sure "'>确定选课</div>
+                                </div>
+                                <p class="corse_btn ">课程名</p>
+                                <p class="corse_btn ">课程号</p>
+                                <p class="corse_content ">课程信息</p>
+                                <p class="corse_btn corse_tea ">任课老师</p>
+                            </div>
+                            <div class="cox_co ">
+                                <div class="box_corse_con " v-for="(index,item) in items ">
+                                    <div class="box_qdxk qdxk_er ">
+                                        <input type="checkbox" name=" "  :id="item.teacher_tno " class="xk " v-model='item.sat' >
+                                        <label :for="item.teacher_tno " v-on:click='xuanze(item,index)'  v-model='item.sat'></label>
+                                    </div>
+                                    <p class="corse_btn orse_con ">{{item.course.course_name}}</p>
+                                    <p class="corse_btn orse_con ">{{item.course.course_cno}}</p>
+                                    <p class="corse_content orse_con ">{{item.course.course_information}}</p>
+                                    <p class="corse_btn orse_con ">{{item.teacher_name}}</p>
+                                </div>
+                            </div>
+                            <div class="corse_btn orse_con fenye ">
+                                <p class="syy " style="height: 20px; " @click='xksyy'>上一页</p>
+                                <span>{{xkPage}}/</span>
+                                <span>{{xkPageNo}}</span>
+                                <p class="xyy " style="height: 20px; " @click='xkxyy'>下一页</p>
+                            </div>
+                        </div>
+
+                        <div class="box_singal corse_title " v-show="flag===3 ">
+                           <div class='kebiao_title'>
+                           		<div>星期一</div>
+                           		<div>星期二</div>
+                           		<div>星期三</div>
+                           		<div>星期四</div>
+                           		<div>星期五</div>
+                           		
+                           </div>
+                            
+                            <div class='box_xk_table'>
+                            	<div class='box_tr' v-for='i in 6'>
+                            		<div class='box_td' v-for='j in 5'>
+                            			<input class='cccccc'  v-for='(index,item) in xuanke' :value='item.course.classTime.class_time==i&&item.course.classTime.class_weekend===j?item.course.course_name:""' :style='item.course.classTime.class_time===i&&item.course.classTime.class_weekend===j?"":"display:none"' readonly>
+                            		    <input class='cccccc'  v-for='(index,item) in xuanke' :value='item.course.classTime.class_time==i&&item.course.classTime.class_weekend===j?item.teacher.teacher_name:""' :style='item.course.classTime.class_time===i&&item.course.classTime.class_weekend===j?"":"display:none"' readonly>
+                            		</div>
+                            	</div>
+                            </div>    
+                        </div>
+                        
+                        
+                        <div class="box_singal " v-show="flag===4 ">
+                           <div class="cj_title ">
+                               <p>课程名</p>
+                               <p>成绩</p>
+                           </div>
+                           <div class="cj_title cj_content " v-for="item in grades ">
+                                <p>{{item.course.course_name}}</p>
+                                <p>{{item.score}}</p>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+        </i-col>
+        </Row>
+        </div>
+        <div :class="sure ">
+            <div class="box_sure ">
+                <div class="sure_title ">确定选择课程</div>
+                <div class="sure_con ">
+                    <div class="sure_qd " @click='sureCourse'>确定</div>
+                    <div class="sure_qx " @click='sure="sure_"'>取消</div>
+                </div>
+            </div>
+        </div>
+     </div> 
+        <script>
+            new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        flag: 2,
+                        sure: 'sure_',
+                        title: '选课',
+                        name: '课程选择',
+                        lists: {},
+                        items: [
+                            
+                        ],
+                        itmm:['1','2','3','4','5','6'],
+                        xuanke: [
+                            
+                        ],
+                        grades: [
+                           
+                        ],
+                        userName:'',
+                        password:'',
+                        resPwdf:'',
+                        resPwdd:'',
+                        xkPage:1,
+                        cxPage:1,
+                        xkPageNo:'',
+                        cxPageNo:'',
+                        a:1,
+                        arr:[]
+                    }
+                },
+                create(){
+                	console.log(123)
+                	 
+                },
+                methods: {
+                	sureInfo(){
+                		axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/studentUpdate",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	student_name:this.lists.student_name,
+                            	student_sno:this.lists.student_sno,
+                            	student_data:this.lists.student_data,
+                            	student_phone:this.lists.student_phone,
+                            	student_address:this.lists.student_address,
+                            	student_class:this.lists.student_class,
+                            }
+                        }).then(result => {
+                           this.lists=result.data
+                           location.reload() 
+                           console.log(result.data[0])
+                        })
+                	},
+                    changeTitle(m, n, q) {
+                        this.flag = m
+                        this.title = n
+                        this.name = q
+                        axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/studentInformation",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	student_name:'',
+                            	student_sno:this.userName
+                            }
+                        }).then(result => {
+                           this.lists=result.data[0]
+                           
+                           console.log(result.data[0])
+                        })
+                        this.userName=localStorage.getItem("userName")
+                        
+                        this.password=localStorage.getItem("password")
+                    },
+                    /* 选课 */
+                    chooseCourse(m, n, q) {
+                    	console.log(this.xkpage)
+                        this.flag = m
+                        this.title = n
+                        this.name = q
+                        axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/courseTeaSel",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	pageNopss:this.xkPage,
+                            	course_name:'',
+                            	teacher_name:'',
+                            	course_cno:''
+                            }
+                        }).then(result => {
+                        	this.items=result.data.teacher
+                           this.xkPageNo=result.data.pageNo
+                           console.log(result.data)
+                        })
+                    },
+                    xuanze(item,index){
+                    	if(item.sat){
+                    		item.sat=!item.sat
+                    	}else{
+                    		item.sat=true
+                    	}
+                    	console.log(item.sat,index)
+                    },
+                    /* 确定选课 */
+                    sureCourse(){
+                    	var _this=this
+                    	console.log(_this.userName)
+                    	var arr=[]
+                    	this.items.forEach(item=>{
+                    		if(item.sat){
+                    			arr.push({teacher_tno:item.teacher_tno,course_cno:item.course.course_cno,userName:_this.userName})
+                    			
+                    		}
+                    	})
+                    	console.log(arr)
+                    	axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/courseChange",
+
+                            data: arr
+                        }).then(result => {
+                           if(result.data){
+                        	   _this.sure="sure_"
+                        	   alert("选课成功！")
+                           }
+                           
+                           console.log(result.data)
+                        })
+                    },
+                    /* 选课信息 */
+                    courseIn(m,n,q){
+                    	this.flag = m
+                        this.title = n
+                        this.name = q
+                        axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/courses",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	student_sno:this.userName,
+                            	course_cno:'',
+                            	teacher_tno:'',
+                            	pageNopss:1
+                            	}
+                        }).then(result => {
+                        	var _this=this
+                        	_this.xuanke=result.data.score
+                        	_this.cxPageNo=result.data.pageNo
+                           console.log(result.data)
+                           
+                           /* _this.xuanke.forEach((item)=>{
+                        	   console.log(item.course.classTime.class_time,item.course.classTime.class_weekend)
+                        	   if(item.course.classTime.class_time==1){
+                        		   var obj={
+                        			if(item.course.classTime.class_weekend==1){
+                        				"mondy":{
+                          				  courseName:item.course.course_name
+                          				  courseName:item.teacher.teacher_name
+                          			  }
+                        			} 
+                        		   }
+                        	   }
+                        	   _this.arr.push({})
+                           }) */
+                           
+                        })
+                    },
+                    /* 成绩 */
+                    courseInfo(m,n,q){
+                    	this.flag = m
+                        this.title = n
+                        this.name = q
+                        axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/courses",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	student_sno:this.userName,
+                            	course_cno:'',
+                            	teacher_tno:'',
+                            	pageNopss:1
+                            	}
+                        }).then(result => {
+                           this.grades=result.data.score
+                           
+                           console.log(result.data)
+                        })
+                    },
+                    resPwd(){
+                    	if(this.resPwdf!=""){
+                    	if(this.resPwdf===this.resPwdt){
+                    		var pwd=this.resPwdt
+                    	}else{
+                    		alert("请输入相同密码")
+                    	}
+                    	}else{
+                    		alert("密码不能为空")
+                    	}
+                    	 axios({
+                             method: "post",
+                             changeOrigin: "true",
+                             url: "/user/updataPassword",
+                             transformRequest: [
+                                 function (data) {
+                                     // 对 data 进行任意转换处理
+                                     return Qs.stringify(data);
+                                 }
+                             ],
+                             data: {
+                            	 userName:this.userName,
+                            	 userPassword:pwd,
+                            	 usertype:"学生"
+                             	}
+                         }).then(result => {
+                            if(result.data){
+                            	alert("修改成功")
+                            }
+                            
+                         })
+                    },
+                    app(){
+                    	this.userName=localStorage.getItem("userName")
+                        
+                        this.password=localStorage.getItem("password")
+                    },
+                    xksyy(){
+                    	this.xkPage-=1
+                    	if(this.xkPage<=1){
+                    		this.xkPage=1
+                    	}
+                    	axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/courseTeaSel",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	pageNopss:this.xkPage
+                            }
+                        }).then(result => {
+                           this.items=result.data.teacher
+                           this.xkPageNo=result.data.pageNo
+                           console.log(result.data)
+                        })
+                    },
+                    xkxyy(){
+                    	this.xkPage+=1
+                    	if(this.xkPage>this.xkPageNo){
+                    		this.xkPage=this.xkPageNo
+                    	}
+                    	axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/courseTeaSel",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	pageNopss:this.xkPage
+                            }
+                        }).then(result => {
+                           this.items=result.data.teacher
+                           this.xkPageNo=result.data.pageNo
+                           console.log(result.data)
+                        })
+                    },
+                    cxxyy(){
+                    	this.cxPage+=1
+                    	if(this.cxPage>this.cxPageNo){
+                    		this.cxPage=this.cxPageNo
+                    	}
+                    	axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/courses",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	pageNopss:this.cxPage,
+                            	student_sno:this.userName
+                            }
+                        }).then(result => {
+                            this.xuanke=result.data.score
+                            this.cxPageNo=result.data.pageNo
+                           console.log(result.data)
+                        })
+                    },
+                    cxsyy(){
+                    	this.cxPage-=1
+                    	if(this.cxPage<=1){
+                    		this.cxPage=1
+                    	}
+                    	axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/courses",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	pageNopss:this.cxPage,
+                            	student_sno:this.userName
+                            }
+                        }).then(result => {
+                            this.xuanke=result.data.score
+                            this.cxPageNo=result.data.pageNo
+                            console.log(result.data)
+                        })
+                    },
+                    exit(){
+                    	window.location.href='/exit'
+                    }
+                },
+                created () {
+                	this.userName=localStorage.getItem("userName")
+                    console.log(this.xkPage)
+                    this.password=localStorage.getItem("password")
+                    axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/courseTeaSel",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	pageNopss:this.xkPage,
+                            	course_name:'',
+                            	teacher_name:'',
+                            	course_cno:''
+                            }
+                        }).then(result => {
+                        	this.items=result.data.teacher
+                           this.xkPageNo=result.data.pageNo
+                           console.log(result.data)
+                        })
+                        axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/admin/AdministorSelUser",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	student_name:'',
+                            	student_sno:this.userName
+                            }
+                        }).then(result => {
+                           this.lists=result.data[0]
+                           
+                           console.log(result.data[0])
+                        })
+                }
+            })
+        </script>
+</body>
+
+</html>

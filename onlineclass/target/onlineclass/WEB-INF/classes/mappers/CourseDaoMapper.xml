@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http//mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace创建命名空间 -->
+<mapper namespace="com.onlineclass.dao.CourseDao">
+	<!-- 查询两个表的信息 -->
+	<resultMap id="coursesSels"
+		type="com.onlineclass.pojo.Teacher">
+		<!-- column是数据表中的,property是pojo的数据类型 -->
+		<id column="teacher_id" property="teacher_id" />
+		<result column="teacher_name" property="teacher_name" />
+		<result column="teacher_tno" property="teacher_tno" />
+		<result column="teacher_age" property="teacher_age" />
+		<result column="teacher_data" property="teacher_data" />
+		<result column="teacher_phone" property="teacher_phone" />
+		<result column="teacher_address" property="teacher_address" />
+		<association property="course"
+			javaType="com.onlineclass.pojo.Course">
+			<id column="course_id" property="course_id" />
+			<result column="course_name" property="course_name" />
+			<result column="course_cno" property="course_cno" />
+			<result column="course_information"
+				property="course_information" />
+			<result column="course_number" property="course_number" />
+			<association property="classTime"
+				javaType="com.onlineclass.pojo.ClassTime">
+				<id column="time_id" property="time_id" />
+				<result column="course_cno" property="course_cno" />
+				<result column="class_weekend" property="class_weekend" />
+				<result column="class_time" property="class_time" />
+			</association>
+		</association>
+	</resultMap>
+	<!-- 分页显示课程 -->
+	<select id="coursesSelPage" resultMap="coursesSels">
+		SELECT * from teacher,course,classtime where
+		teacher.teacher_course_id=course.course_cno
+		and 1=1
+		and
+		classtime.course_cno=course.course_cno
+		<if test="course_name!=''and course_name!=null">
+			and course.course_name like concat('%',#{course_name},'%')
+		</if>
+		<if test="course_cno!=''and course_cno!=null">
+			and course.course_cno like concat('%',#{course_cno},'%')
+		</if>
+		<if test="teacher_name!=''and teacher_name!=null">
+			and teacher.teacher_name like
+			concat('%',#{teacher_name},'%')
+		</if>
+		limit ${(pageNo-1)*pageSize},${pageSize};
+	</select>
+
+	<!-- 显示所有课程 -->
+	<select id="coursesSel" resultMap="coursesSels">
+		SELECT * from teacher,course,classtime where
+		teacher.teacher_course_id=course.course_cno
+		and 1=1
+		and
+		classtime.course_cno=course.course_cno
+		<if test="course_name!=''and course_name!=null">
+			and course.course_name like concat('%',#{course_name},'%')
+		</if>
+		<if test="course_cno!=''and course_cno!=null">
+			and course.course_cno like concat('%',#{course_cno},'%')
+		</if>
+		<if test="teacher_name!=''and teacher_name!=null">
+			and teacher.teacher_name like
+			concat('%',#{teacher_name},'%')
+		</if>
+	</select>
+
+
+	<!-- 查询三个表的信息 -->
+	<resultMap id="scoreSels" type="com.onlineclass.pojo.Score">
+		<!-- column是数据表中的,property是pojo的数据类型 -->
+		<id column="score_id" property="score_id" />
+		<result column="score" property="scores" />
+		<collection property="student"
+			ofType="com.onlineclass.pojo.Student">
+			<id column="student_id" property="student_id" />
+			<result column="student_name" property="student_name" />
+			<result column="student_sno" property="student_sno" />
+			<result column="student_age" property="student_age" />
+			<result column="student_data" property="student_data" />
+			<result column="student_phone" property="student_phone" />
+			<result column="student_address" property="student_address" />
+			<result column="student_class" property="student_class" />
+		</collection>
+		<collection property="teacher"
+			ofType="com.onlineclass.pojo.Teacher">
+			<id column="teacher_id" property="teacher_id" />
+			<result column="teacher_name" property="teacher_name" />
+			<result column="teacher_tno" property="teacher_tno" />
+			<result column="teacher_age" property="teacher_age" />
+			<result column="teacher_data" property="teacher_data" />
+			<result column="teacher_phone" property="teacher_phone" />
+			<result column="teacher_address" property="teacher_address" />
+		</collection>
+		<collection property="course"
+			ofType="com.onlineclass.pojo.Course">
+			<id column="course_id" property="course_id" />
+			<result column="course_name" property="course_name" />
+			<result column="course_cno" property="course_cno" />
+			<result column="course_information"
+				property="course_information" />
+			<result column="course_number" property="course_number" />
+			<collection property="classTime"
+				ofType="com.onlineclass.pojo.ClassTime">
+				<id column="time_id" property="time_id" />
+				<result column="course_cno" property="course_cno" />
+				<result column="class_weekend" property="class_weekend" />
+				<result column="class_time" property="class_time" />
+			</collection>
+		</collection>
+		<!-- <collection property="course" column="course_cno" select="getCourse" 
+			ofType="com.onlineclass.pojo.Course" /> <collection property="teacher" column="teacher_tno" 
+			select="getTeacher" ofType="com.onlineclass.pojo.Teacher" /> -->
+	</resultMap>
+	<!--显示成绩信息 -->
+	<select id="scores" resultMap="scoreSels">
+		select * from score,student,teacher,course,classtime where
+		score.student_sno=student.student_sno
+		and
+		score.teacher_tno=teacher.teacher_tno
+		and
+		score.course_cno=course.course_cno
+		and
+		classtime.course_cno=course.course_cno
+		and 1=1
+		<if test="student_sno!=''and student_sno!=null">
+			and score.student_sno=#{student_sno}
+		</if>
+		<if test="course_cno!=''and course_cno!=null">
+			and course.course_cno=#{course_cno}
+		</if>
+		<if test="teacher_tno!=''and teacher_tno!=null">
+			and score.teacher_tno=#{teacher_tno}
+		</if>
+	</select>
+
+	<!--分页显示成绩信息 -->
+	<select id="scoresPage" resultMap="scoreSels">
+		select * from score,student,teacher,course,classtime where
+		score.student_sno=student.student_sno
+		and
+		score.teacher_tno=teacher.teacher_tno
+		and
+		score.course_cno=course.course_cno
+		and
+		classtime.course_cno=course.course_cno
+		and 1=1
+		<if test="student_sno!=''and student_sno!=null">
+			and score.student_sno=#{student_sno}
+		</if>
+		<if test="course_cno!=''and course_cno!=null">
+			and score.course_cno=#{course_cno}
+		</if>
+		<if test="teacher_tno!=''and teacher_tno!=null">
+			and score.teacher_tno=#{teacher_tno}
+		</if>
+		limit ${(pageNo-1)*pageSize},${pageSize}
+	</select>
+	
+	
+	<!--显示学生成绩信息 -->
+	<select id="scoresStu" resultMap="scoreSels">
+		select * from score,student,teacher,course,classtime where
+		score.student_sno=student.student_sno
+		and
+		score.teacher_tno=teacher.teacher_tno
+		and
+		score.course_cno=course.course_cno
+		and
+		classtime.course_cno=course.course_cno
+		and 1=1
+		<if test="student_sno!=''and student_sno!=null">
+			and score.student_sno=#{student_sno}
+		</if>
+		<if test="student_name!=''and student_name!=null">
+			and student.student_name like concat('%',#{student_name},'%')
+		</if>
+		<if test="teacher_name!=''and teacher_name!=null">
+			and teacher.teacher_name like concat('%',#{teacher_name},'%')
+		</if>
+		<if test="course_name!=''and course_name!=null">
+			and course.course_name like concat('%',#{course_name},'%')
+		</if>
+	</select>
+
+	<!--分页显示学生成绩信息 -->
+	<select id="scoresStuPage" resultMap="scoreSels">
+		select * from score,student,teacher,course,classtime where
+		score.student_sno=student.student_sno
+		and
+		score.teacher_tno=teacher.teacher_tno
+		and
+		score.course_cno=course.course_cno
+		and
+		classtime.course_cno=course.course_cno
+		and 1=1
+		<if test="student_sno!=''and student_sno!=null">
+			and score.student_sno=#{student_sno}
+		</if>
+		<if test="student_name!=''and student_name!=null">
+			and student.student_name like concat('%',#{student_name},'%')
+		</if>
+		<if test="teacher_name!=''and teacher_name!=null">
+			and teacher.teacher_name like concat('%',#{teacher_name},'%')
+		</if>
+		<if test="course_name!=''and course_name!=null">
+			and course.course_name like concat('%',#{course_name},'%')
+		</if>
+		limit ${(pageNo-1)*pageSize},${pageSize}
+	</select>
+	
+	
+	
+	<resultMap id="coursesPage"
+		type="com.onlineclass.pojo.Course">
+			<id column="course_id" property="course_id" />
+			<result column="course_name" property="course_name" />
+			<result column="course_cno" property="course_cno" />
+			<result column="course_information"
+				property="course_information" />
+			<result column="course_number" property="course_number" />
+			<association property="classTime"
+				javaType="com.onlineclass.pojo.ClassTime">
+				<id column="time_id" property="time_id" />
+				<result column="course_cno" property="course_cno" />
+				<result column="class_weekend" property="class_weekend" />
+				<result column="class_time" property="class_time" />
+			</association>
+	</resultMap>
+
+	<!-- 查询课程所有信息 -->
+	<select id="getCourse" resultMap="coursesPage">
+		SELECT * from course,classtime where
+		1=1
+		and course.course_cno=classtime.course_cno
+		<if test="course_cno!=''and course_cno!=null">
+		and course.course_cno like concat('%',#{course_cno},'%')
+		</if>
+		<if test="course_name!=''and course_name!=null">
+		and course.course_name like concat('%',#{course_name},'%')
+		</if>
+	</select>
+	<!-- 分页显示课程信息 -->
+	<select id="getCoursePages" resultMap="coursesPage">
+		SELECT * from course,classtime where
+		1=1
+		and course.course_cno=classtime.course_cno
+		<if test="course_cno!=''and course_cno!=null">
+		and course.course_cno like concat('%',#{course_cno},'%')
+		</if>
+		<if test="course_name!=''and course_name!=null">
+		and course.course_name like concat('%',#{course_name},'%')
+		</if>
+		limit ${(pageNo-1)*pageSize},${pageSize}
+	</select>
+	
+	
+	<!-- 查询教师所有信息 -->
+	<select id="getTeacher" resultType="Teacher">
+		SELECT * from teacher where
+		teacher_tno=#{teacher_tno}
+	</select>
+	
+	
+
+	<!-- 修改课程信息 -->
+	<update id="coursesUpdate" parameterType="Course">
+		UPDATE course set
+		course_name=#{course_name},course_information=#{course_information}
+		where course_cno=#{course_cno}
+	</update>
+
+	<!-- 删除课程 -->
+	<delete id="coursesDel" parameterType="Course">
+		DELETE from course where 1=1
+		<if test="course_cno!=''and course_cno!=null">
+			and course_cno=#{course_cno}
+		</if>
+	</delete>
+
+	<!-- 添加课程 -->
+	<insert id="coursesInsert" parameterType="Course">
+		INSERT into course(course_name,course_cno,course_information,course_number)
+		values(#{course_name},#{course_cno},#{course_information},#{course_number})
+	</insert>
+
+</mapper>

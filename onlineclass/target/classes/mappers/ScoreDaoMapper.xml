@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http//mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace创建命名空间 -->
+<mapper namespace="com.onlineclass.dao.ScoreDao">
+	<!-- 课程选择 -->
+	<insert id="courseChange" parameterType="Score">
+		INSERT into score(student_sno,course_cno,teacher_tno,score)
+		values(#{student_sno},#{course_cno},#{teacher_tno},0)
+	</insert>
+	<!-- 课程取消 -->
+	<delete id="courseCancel" parameterType="Score">
+		DELETE from score where student_sno=#{student_sno} and
+		course_cno=#{course_cno}
+	</delete>
+
+	<!-- 课程查询 -->
+	<select id="scoresSel" parameterType="Score" resultType="Score">
+		SELECT * from score where
+		1=1
+		<if test="student_sno!=''and student_sno!=null">
+			and student_sno=#{student_sno}
+		</if>
+		<if test="course_cno!=''and course_cno!=null">
+			and course_cno=#{course_cno}
+		</if>
+	</select>
+
+	<!-- 学生课程成绩录入 -->
+	<update id="scoresInput" parameterType="Score">
+		UPDATE Score set score=#{score} where student_sno=#{student_sno} and
+		course_cno=#{course_cno}
+	</update>
+
+</mapper>

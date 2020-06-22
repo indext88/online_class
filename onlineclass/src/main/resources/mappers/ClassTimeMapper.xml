@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http//mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace创建命名空间 -->
+<mapper namespace="com.onlineclass.dao.ClassTimeDao">
+<!-- 添加课程时间信息 -->
+<insert id="InsertClassTime" parameterType="ClassTime">
+INSERT into classtime(course_cno,class_weekend,class_time)
+ values(#{course_cno},#{class_weekend},#{class_time})
+</insert>
+
+<!-- 查询选课时间 -->
+<select id="classTimes" resultType="ClassTime">
+SELECT * from classtime where 1=1 
+<if test="course_cno!='' and course_cno!=null">
+and course_cno=#{course_cno} 
+</if>
+<if test="class_weekend!=0 and class_time!=0">
+and (class_weekend=#{class_weekend} and class_time=#{class_time})
+</if>
+
+</select>
+
+<!-- 删除选课时间 -->
+<delete id="DelClassTime" parameterType="ClassTime">
+DELETE from classtime where 1=1 
+and course_cno=#{course_cno} 
+</delete>
+
+<!-- 修改选课时间 -->
+<update id="UpdateClassTime" parameterType="ClassTime">
+UPDATE classtime set class_weekend=#{class_weekend},class_time=#{class_time}
+where course_cno=#{course_cno}
+</update>
+
+</mapper>

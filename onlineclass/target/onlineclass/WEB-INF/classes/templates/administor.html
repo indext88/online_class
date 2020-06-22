@@ -1,0 +1,2490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>管理员</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <script type="text/javascript" src="http://v1.vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/iview@1.0.1/dist/iview.min.js"></script>
+    <script src="https://at.alicdn.com/t/font_1296423_92fclenj85a.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.bootcss.com/qs/6.6.0/qs.min.js"></script>
+</head>
+
+<body>
+    <style scoped>
+        #app,
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            cursor:default
+        }
+
+        .layout {
+            border: 1px solid #d7dde4;
+            background: #f5f7f9;
+            position: relative;
+        }
+
+        .layout-breadcrumb {
+            padding: 10px 15px 0;
+        }
+
+        .layout-content {
+            height: 83vh;
+            margin: 15px;
+            overflow: hidden;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        .layout-content-main {
+            padding: 10px;
+        }
+
+        .layout-copy {
+            text-align: center;
+            padding: 10px 0 20px;
+            color: #9ea7b4;
+        }
+
+        .layout-menu-left {
+            background: #464c5b;
+        }
+
+        .layout-header {
+            height: 60px;
+            background: #fff;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+        }
+
+        .layout-logo-left {
+            width: 90%;
+            height: 30px;
+            background: #5b6270;
+            border-radius: 3px;
+            margin: 15px auto;
+            color: #d7dde4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px 0 10px;
+        }
+
+        .box_yonghu {
+            width: 100%;
+            height: 82vh;
+            display: flex;
+            flex-direction: column;
+            background: rgba(160, 160, 224, 0.3);
+        }
+
+        .box_title_yonghu {
+            display: flex;
+            width: 99%;
+            height: 50px;
+            align-items: center;
+            background: rgba(10, 32, 56, 0.8);
+            border-radius: 5px;
+            margin: 2px auto 0;
+        }
+
+        .yonghu_item {
+            width: 20%;
+            color: #fff;
+            height: 50px;
+            border-left: 1px solid #EDEDED;
+            padding: 0 0 0 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .box_content {
+            background: #fff;
+            color: #333333;
+            margin: 0;
+            border-bottom: 1px solid #EDEDED;
+            border-radius: 0;
+            margin: 0 auto;
+        }
+
+        .content_yonghu {
+            width: 25%;
+            color: #333333;
+            height: 45px;
+            border-left: 1px solid #EDEDED;
+            padding: 0 0 0 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .yh_change {
+            height: 60%;
+            width: 40%;
+            margin: 0 10px 0 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+            background: rgba(255, 0, 0, 0.8);
+            color: #fff;
+        }
+
+        .yh_splice {
+            height: 60%;
+            width: 40%;
+            color: #f00;
+            border: 1px solid #f00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+        }
+
+        .yonghu_item_cz {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 25%;
+            height: 45px;
+            border-left: 1px solid #EDEDED;
+        }
+
+        
+
+        .orse_con {
+            color: #000;
+            border: 0;
+            height: 45px;
+        }
+
+        .orse_con>p {
+            height: 100%;
+        }
+
+        .fenye {
+            background: #fff;
+            height: 42px;
+            width: 99%;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 50px;
+            border: 1px solid #EDEDED;
+            margin: 0 auto;
+            border: 0;
+        }
+
+        .syy {
+            width: 60px;
+            height: 20px;
+            background: rgba(236, 19, 19, 1);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+            margin: 0 3px 0 0;
+        }
+
+        .xyy {
+            width: 60px;
+            height: 20px;
+            border: 1px solid rgb(236, 19, 19);
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+            margin: 0 0 0 3px;
+        }
+
+        .sure,.stuch ,.teachansae,.teacourchansae , .gradesList,.addcourse,.addstudent{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .sure_ ,.stuch_,.teachansae_,.teacourchansae_,.gradesList_,.addcourse_{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index:-1;
+            visibility:hidden
+        }
+
+        .box_sure {
+            width: 41%;
+            height: 60%;
+            background: #FFF;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sure_title {
+            font-size: 30px;
+            font-weight: bold;
+            font-family: fontKai;
+            color: #000;
+
+        }
+
+        .sure_con {
+            display: flex;
+            justify-content: space-between;
+            width: 170px;
+            margin: 20px 0 0 0;
+        }
+
+        .sure_qd {
+            width: 70px;
+            height: 30px;
+            background: rgb(24, 11, 14);
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: default;
+        }
+
+        .sure_qx {
+            width: 70px;
+            height: 30px;
+            color: #000;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #000;
+            cursor: default;
+        }
+
+        .singal_name {
+            width: 40%;
+            height: 40px;
+            border: 1px solid rgb(117, 104, 104);
+            margin: 0 0 20px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+
+        }
+
+        @font-face {
+            font-family: fontKai;
+            src: url('../font/kai.ttf');
+        }
+
+        .singal_name_title {
+            font-family: fontKai;
+            height: 39px;
+            width: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            background: rgba(7, 0, 0, 0.7);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .name_content {
+            display: flex;
+            flex: 1;
+            background: rgba(160, 160, 224, 0);
+            border: 0;
+            outline: none;
+            font-family: fontKai;
+            color: #333333;
+            font-size: 15px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+
+        .box_radio input+label {
+            display: block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #333333;
+            border-radius: 50%;
+        }
+
+        .box_radio input:checked+label {
+            background: #333333;
+            padding: 2px;
+        }
+
+        .radio_class {
+            display: flex;
+            width: 70%;
+            justify-content: space-around;
+            height: 30px;
+        }
+
+        .box_radio {
+            display: flex;
+            align-items: center;
+            font-family: myfont;
+            color: #333333;
+            
+        }
+
+        .radio_name {
+            margin: 0 0 0px 5px;
+            font-family: fontKai;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .box_radio input {
+            display: none;
+        }
+
+        .sure_con {
+            display: flex;
+            justify-content: space-between;
+            width: 59%;
+            margin: 20px 0 0 0;
+        }
+
+        .sure_qd {
+            width: 40%;
+            height: 30px;
+            background: rgb(24, 11, 14);
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: default;
+        }
+
+        .sure_qx {
+            width: 40%;
+            height: 30px;
+            color: #000;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #000;
+            cursor: default;
+        }
+
+        .search_box {
+            display: flex;
+            width: 39%;
+            height: 40px;
+            border: 1px solid #000;
+            padding: 0 0 0 10px;
+            border-radius: 5px;
+            font-family: fontKai;
+            margin: 15px 0 15px 6px;
+            justify-content: space-between;
+        }
+
+        .search_box>input {
+            width: 73%;
+            background: rgba(0, 0, 0, 0);
+            border: 0;
+            outline: none;
+            color: #333333;
+            font-weight: bold;
+            font-size: 15px;
+            letter-spacing: 1px;
+        }
+
+        .search_box>input::placeholder {
+            font-size: 12px;
+        }
+
+        .search_box img {
+            width: 30px;
+            height: 25px;
+        }
+
+        .sousuo {
+            height: 100%;
+            background: rgba(10, 32, 56, 0.8);
+            display: flex;
+            flex: 1;
+            border-radius: 0 4px 4px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 0 0 1px;
+        }
+
+        .box_title {
+            display: flex;
+            width: 99%;
+            height: 51px;
+            align-items: center;
+            background: rgba(10, 32, 56, 0.8);
+            border-radius: 5px;
+            margin: 0 auto;
+        }
+
+        .titleWid {
+            width: 20%;
+            color: #fff;
+            height: 50px;
+            border-left: 1px solid #EDEDED;
+            padding: 0 0 0 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .title_id {
+            background: #fff;
+            border-bottom: 1px solid #d7dde4;
+            color: #333333;
+            display: flex;
+        }
+
+        .qdxk {
+            width: 60%;
+            height: 60%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(238, 13, 13, 0.8);
+            color: #fff;
+            border-radius: 5px;
+            cursor: default;
+            font-size: 8px;
+            margin-left: 35px;
+        }
+
+        .title_tj {
+            background: #fff;
+            border-bottom: 1px solid #d7dde4;
+            color: #333333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .corse_btn {
+            display: flex;
+            align-items: center;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            border-left: 1px solid #EDEDED;
+            color: #FFF;
+            padding-left: 10px;
+        }
+
+        .orse_con {
+            color: #000;
+            border: 0;
+        }
+
+        .orse_con>p {
+            height: 100%;
+        }
+
+        .box_singal {
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(160, 160, 224, 0.3);
+            overflow:auto
+        }
+        .selet {
+            height: 100%;
+            width: 15%;
+        }
+
+        .selet>select {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            border: 0;
+            border-left: 1px solid rgb(29, 8, 8);
+            outline: none;
+            font-weight: bold;
+            color: rgb(54, 45, 45);
+        }
+        .option{
+            appearance: none;
+            background: rgba(0, 0, 0, 0);
+            height: 20px;
+            border: 1px solid #000;
+        }
+        .box_change{
+            width: 520px;
+            height: 330px;
+            background: rgba(255, 255, 255, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .box_c{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .redio_t{
+            width: 40%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .yonghu_cha{
+            width: 30%;
+            height: 40px;
+            background: #333333;
+            color: #fff;
+            font-family: fontKai;
+            margin: 20px 0 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+        .tjkc_course{
+        	display: flex;
+            justify-content: center;
+            align-items: center;
+            width:200px;
+            height:40px;
+            background:#f00;
+            color:#fff;
+            font-size:15px;
+            margin-left:63vw;
+            margin-top:-30px
+        }
+        .boxstudeng{
+        	height:80%;
+        }
+        .title_content {
+            display: flex;
+            font-family: fontKai;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+            font-weight: bolder;
+            color: #000;
+            letter-spacing: 3px;
+        }
+    </style>
+
+    <div id="app">
+        <div class="layout">
+            <Row type="flex">
+                <i-col span="5" class="layout-menu-left">
+                    <Menu active-key="1-1" theme="dark" width="auto" :open-keys="['1']">
+                        <div class="layout-logo-left">
+                        	<p>{{yonghu[0].user_name}}</p>
+                            <p class="retut" @click='exit'>退出</p>
+                        </div>
+                        <Submenu key="1">
+                            <template slot="title">
+                                <Icon type="ios-navigate"></Icon>
+                                用户管理
+                            </template>
+                            <Menu-item key="1-1" @click='admin(0,"用户管理","登陆用户")'>登陆用户</Menu-item>
+                            <Menu-item key="1-2" @click='stuCtroll(1,"用户管理","学生信息")'>学生信息</Menu-item>
+                            <Menu-item key="1-3" @click='selTeache(2,"用户管理","教师信息")'>教师信息</Menu-item>
+                            <Menu-item key="1-4" @click='changeTitle(3,"用户管理","修改密码")'>修改密码</Menu-item>
+                        </Submenu>
+                        <Submenu key="2">
+                            <template slot="title">
+                                <Icon type="ios-keypad"></Icon>
+                                课程管理
+                            </template>
+                            <Menu-item key="2-1" @click='teaCtroll(4,"课程管理","课程信息")'>课程信息</Menu-item>
+                            <Menu-item key="2-2" @click='xkmanger(5,"课程管理","选课管理")'>选课管理</Menu-item>
+                        </Submenu>
+                        <Submenu key="3">
+                            <template slot="title">
+                                <Icon type="ios-analytics"></Icon>
+                                成绩
+                            </template>
+                            <Menu-item key="3-1" @click='xkmanger(6,"成绩","学生成绩")'>学生成绩</Menu-item>
+                        </Submenu>
+                    </Menu>
+                </i-col>
+                <i-col span="19">
+                    <div class="layout-header title_content">管理员管理</div>
+                    <div class="layout-breadcrumb">
+                        <Breadcrumb>
+                            <Breadcrumb-item href="#">首页</Breadcrumb-item>
+                            <Breadcrumb-item href="#">{{title}}</Breadcrumb-item>
+                            <Breadcrumb-item>{{name}}</Breadcrumb-item>
+                        </Breadcrumb>
+                    </div>
+                    <div class="layout-content">
+                        <div class="layout-content-main">
+                            <div v-show="flag===0" class="box_yonghu" style='overflow:auto'>
+                             <div style="width: 100%;height: 100%;">
+                            <div class="search_box kecheng">
+                                                <input type="text" placeholder="请输入学号" v-model="adminsearch.con">
+                                                <div class="selet">
+                                                    <select name="" id="" v-model="adminsearch.type">
+                                                        <option value="学生" class="option">学生</option>
+                                                        <option value="教师" class="option">老师</option>
+                                                        <option value="管理员" class="option">管理员</option>
+                                                        <option value="" class="option">用户名</option>
+                                                    </select>
+                                                </div>
+                                                <div class="sousuo kecheng_img" @click='admSearch'>
+                                                    <img src="../img/sousuo.png" alt="">
+                                                </div>
+                                            </div>
+                                <div class="box_title_yonghu">
+                                    <div class="yonghu_item" style="width:25%">用户名</div>
+                                    <div class="yonghu_item" style="width:25%">密码</div>
+                                    <div class="yonghu_item" style="width:25%">用户类型</div>
+                                    <div class="yonghu_item " style="width:25%">操作</div>
+                                </div>
+                                <div class="box_title_yonghu box_content" v-for="(index,item) in yonghu">
+                                    <div class="content_yonghu">{{item.user_name}}</div>
+                                    <div class="content_yonghu">{{item.user_password}}</div>
+                                    <div class="content_yonghu">{{item.user_type}}</div>
+                                    <div class="yonghu_item_cz">
+                                        <div class="yh_change" @click="changeI(index)">修改</div>
+                                        <div class="yh_splice" @click="spliceI(index)">删除</div>
+                                    </div>
+                                </div>
+                                <div class="corse_btn orse_con fenye">
+                                    <p class="syy" style="height: 20px;" @click='adminsyy'>上一页</p>
+                                    <span>{{adminPage}}/</span>
+                                    <span>{{adminNo}}</span>
+                                    <p class="xyy" style="height: 20px;" @click='adminxyy'>下一页</p>
+                                </div>
+                            </div>
+                            </div>
+                            <div v-show="flag===1" class="box_singal">
+                                    <div style="width: 100%;height: 100%;">
+                                            <div class="search_box kecheng">
+                                                <input type="text" placeholder="请输入学号/姓名！" v-model="stusearch.con">
+                                                <div class="selet">
+                                                    <select name="" id="" v-model="searchType">
+                                                        <option value="姓名" class="option">姓名</option>
+                                                        <option value="学号" class="option">学号</option>
+                                                        <option value="班级" class="option">班级</option>
+                                                    </select>
+                                                </div>
+                                                <div class="sousuo kecheng_img" @click='stuSearch'>
+                                                    <img src="../img/sousuo.png" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="tjkc_course" @click='addstu=1'>添加学生</div><br>
+                        <div class=" box_title">
+                                            <div class="titleWid">学号</div>
+                                            <div class="titleWid">姓名</div>
+                                            <div class="titleWid">出生日期</div>
+                                            <div class="titleWid">班级</div>
+                                            <div class="titleWid">操作</div>
+                                        </div>
+                                        <div class=" box_title title_id" v-for="(index,item) in stuList">
+                                            <p class="title_id titleWid">{{item.student_sno}}</p>
+                                            <p class="title_id titleWid">{{item.student_name}}</p>
+                                            <p class="title_id titleWid">{{item.student_data}}</p>
+                                            <p class="title_id titleWid">{{item.student_class}}</p>
+                                            <div class="title_id titleWid qdxk_er">
+                                                <div class="qdxk" @click="changestu(index)">修改信息</div>
+                                            </div>
+
+                                        </div>
+                                        <div class="corse_btn orse_con fenye">
+                                            <p class="syy" style="height: 20px;" @click='stusyy'>上一页</p>
+                                            <span>{{stuPage}}/</span>
+                                            <span>{{stuNo}}</span>
+                                            <p class="xyy" style="height: 20px;" @click='stuxyy'>下一页</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-show="flag===2" class="box_singal">
+                                        <div style="width: 100%;height: 100%;">
+                                                <div class="search_box kecheng">
+                                                    <input type="text" placeholder="请输入学号/姓名！" v-model="teasearch.con">
+                                                    <div class="selet">
+                                                        <select name="" id="" v-model="teaType">
+                                                            <option value="工号" class="option">工号</option>
+                                                            <option value="姓名" class="option">姓名</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="sousuo kecheng_img" @click='teaSearch'>
+                                                        <img src="../img/sousuo.png" alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="tjkc_course" @click='addteaa=1'>添加老师</div><br>
+                            <div class=" box_title">
+                                                <div class="titleWid">工号</div>
+                                                <div class="titleWid">姓名</div>
+                                                <div class="titleWid">出生日期</div>
+                                                <div class="titleWid">课程</div>
+                                                <div class="titleWid">操作</div>
+                                            </div>
+                                            <div class=" box_title title_id" v-for="(index,item) in teaList">
+                                                <p class="title_id titleWid">{{item.teacher_tno}}</p>
+                                                <p class="title_id titleWid">{{item.teacher_name}}</p>
+                                                <p class="title_id titleWid">{{item.teacher_data}}</p>
+                                                <p class="title_id titleWid">{{item.course.course_name}}</p>
+                                                <div class="title_id titleWid qdxk_er">
+                                                    <div class="qdxk" @click='changeTea(index)'>修改信息</div>
+                                                </div>
+    
+                                            </div>
+                                            <div class="corse_btn orse_con fenye">
+                                                <p class="syy" style="height: 20px;" @click='teasyy'>上一页</p>
+                                                <span>{{teaPage}}/</span>
+                                                <span>{{teaNo}}</span>
+                                                <p class="xyy" style="height: 20px;" @click='teaxyy'>下一页</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-show="flag===3" class="box_singal">
+                                        <div class="box_change">
+                                            <div class="box_c" v-show="i===0">
+                                            <div class="singal_name" style="width: 60%;">
+                                                <div class=" singal_name_title">
+                                                    用户名
+                                                </div>
+                                                <input type="text" class="name_content" :value="czs[indexinfo].id" v-model="admChange.username">
+                                            </div>
+                                            <div class="singal_name" style="width: 60%;">
+                                                <div class=" singal_name_title">
+                                                    密码
+                                                </div>
+                                                <input type="text" class="name_content" :value="czs[indexinfo].id" v-model="admChange.password">
+                                            </div>
+                                            <div class="redio_t">
+                                            <div class="box_radio" v-for="(n,item) in radios" :key="n">
+                                                    <input type="radio" name="" :id="item.title" value="学生" :checked='item.ischecked'>
+                                                    <label :for="item.title" @click='radioChoo(n)'></label>
+                                                    <p class="radio_name">{{item.name}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="yonghu_cha" @click="restpass(n)">查找</div>
+                                        </div>
+                                        <div class="box_c" v-show="i===1">
+                                                <div class="singal_name" style="width: 70%;">
+                                                    <div class=" singal_name_title">
+                                                        新密码
+                                                    </div>
+                                                    <input type="text" class="name_content"  v-model="admChange.restpassword">
+                                                </div>
+                                                <div class="singal_name" style="width: 70%;">
+                                                    <div class=" singal_name_title">
+                                                        确定密码
+                                                    </div>
+                                                    <input type="text" class="name_content" v-model="admChange.restpassword2">
+                                                </div>
+                                                <div style="width: 50%;display: flex;justify-content: space-between;">
+                                                <div class="yonghu_cha" style="background:crimson ;" @click='restpasswordre'>修改</div>
+                                                <div class="yonghu_cha" @click="i=0">取消</div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div v-show="flag===4" class="box_yonghu">
+                                        <div style="width: 100%;height: 100%;">
+                                        <div class="search_box kecheng">
+                                                <input type="text" placeholder="请输入学号/姓名！" v-model="coursesearch.con">
+                                                <div class="selet">
+                                                    <select name="" id="" v-model="courseType">
+                                                        <option value="课程名" class="option">课程名</option>
+                                                        <option value="课程号" class="option">课程号</option>
+                                                    </select>
+                                                </div>
+                                                <div class="sousuo kecheng_img" @click='courseSearch'>
+                                                    <img src="../img/sousuo.png" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="tjkc_course" @click='addcourse="addcourse"'>添加课程</div>
+                                    <div class="box_title_yonghu">
+                                        <div class="yonghu_item" style="width:18%">课程名</div>
+                                        <div class="yonghu_item" style="width:18%">课程号</div>
+                                        <div class="yonghu_item" style="width:22%">课程信息</div>
+                                        <div class="yonghu_item" style="width:22%">时间</div>
+                                        <div class="yonghu_item " style="width:20%">操作</div>
+                                    </div>
+                                    <div class="box_title_yonghu box_content" v-for="(index,item) in teaList">
+                                        <div class="content_yonghu" style="width:18%">{{item.course_name}}</div>
+                                        <div class="content_yonghu" style="width:18%">{{item.course_cno}}</div>
+                                        <div class="content_yonghu" style="width:22%">{{item.course_information}}</div>
+                                        <div class="content_yonghu" style="width:22%">
+                                        <p>星期 {{item.classTime.class_weekend}} --></p><br>
+                                        <p>第 {{item.classTime.class_time}}节课</p><br>
+                                        <p>
+                                        </div>
+                                        <div class="yonghu_item_cz" style="width:20%">
+                                            <div class="yh_change" @click="changeCoursetea(index)">修改</div>
+                                            <div class="yh_splice">删除</div>
+                                        </div>
+                                    </div>
+                                    <div class="corse_btn orse_con fenye">
+                                        <p class="syy" style="height: 20px;" @click='cousyy'>上一页</p>
+                                        <span>{{couPage}}/</span>
+                                        <span>{{couNo}}</span>
+                                        <p class="xyy" style="height: 20px;" @click='couxyy'>下一页</p>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div v-show="flag===5" class="box_yonghu">
+                                <div class="search_box kecheng">
+                                                <input type="text" placeholder="请输入学号" v-model="xuankeseaddd.con">
+                                                <div class="selet">
+                                                    <select name="" id="" v-model="xuankeseaddd.type">
+                                                        <option value="学号" class="option">学号</option>
+                                                        <option value="班级" class="option">班级</option>
+                                                    </select>
+                                                </div>
+                                                <div class="sousuo kecheng_img" @click='xuankSearch'>
+                                                    <img src="../img/sousuo.png" alt="">
+                                                </div>
+                                            </div>
+                                        <div class="box_title_yonghu">
+                                            <div class="yonghu_item">学号</div>
+                                            <div class="yonghu_item">姓名</div>
+                                            <div class="yonghu_item">班级</div>
+                                            <div class="yonghu_item">任课教师</div>
+                                            <div class="yonghu_item ">课程名</div>
+                                        </div>
+                                        <div class="box_title_yonghu box_content" v-for="(index,item) in courseList">
+                                            <div class="content_yonghu">{{item.student.student_sno}}</div>
+                                            <div class="content_yonghu">{{item.student.student_name}}</div>
+                                            <div class="content_yonghu">{{item.student.student_class}}</div>
+                                            <div class="content_yonghu">{{item.teacher.teacher_name}}</div>
+                                            <div class="content_yonghu">{{item.course.course_name}}</div>
+                                            
+                                        </div>
+                                        <div class="corse_btn orse_con fenye">
+                                            <p class="syy" style="height: 20px;"@click='xkcousyy'>上一页</p>
+                                            <span>{{xkcouPage}}/</span>
+                                            <span>{{xkcouNo}}</span>
+                                            <p class="xyy" style="height: 20px;" @click='xkcouxyy'>下一页</p>
+                                        </div>
+                                    </div>
+                                    <div v-show="flag===6" class="box_singal">
+                                        <div style="width: 100%;height: 100%;">
+                                                <div class="search_box kecheng">
+                                                    <input type="text" placeholder="请输入学号/姓名！" v-model="gradeses.con">
+                                                    <div class="selet">
+                                                        <select name="" id="" select="" v-model="gradestype">
+                                                            <option value="学号" class="option">学号</option>
+                                                            <option value="学生姓名" class="option">学生姓名</option>
+                                                            <option value="教师名" class="option">教师名</option>
+                                                            <option value="课程名" class="option">课程名</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="sousuo kecheng_img" @click='searchGrades'>
+                                                        <img src="../img/sousuo.png" alt="">
+                                                    </div>
+                                                </div>
+                            <div class=" box_title">
+                                                <div class="titleWid" style="width:16%">学号</div>
+                                                <div class="titleWid" style="width:16%">姓名</div>
+                                                <div class="titleWid" style="width:16%">课程名</div>
+                                                <div class="titleWid" style="width:16%">任课教师</div>
+                                                <div class="titleWid" style="width:16%">成绩</div>
+                                                <div class="titleWid" style="width:16%">操作</div>
+                                            </div>
+                                            <div class=" box_title title_id" v-for="(index,item) in courseList">
+                                                <p class="title_id titleWid" style="width:16%">{{item.student.student_sno}}</p>
+                                                <p class="title_id titleWid" style="width:16%">{{item.student.student_name}}</p>
+                                                <p class="title_id titleWid" style="width:16%">{{item.course.course_name}}</p>
+                                                <p class="title_id titleWid" style="width:16%">{{item.teacher.teacher_name}}</p>
+                                                <p class="title_id titleWid" style="width:16%">{{item.score}}</p>
+                                                <div class="title_id titleWid qdxk_er" style="width:16%">
+                                                    <div class="qdxk" @click="gradesChange(index)">修改信息</div>
+                                                </div>
+    
+                                            </div>
+                                            <div class="corse_btn orse_con fenye">
+                                                <p class="syy" style="height: 20px;" @click='xkcousyy'>上一页</p>
+                                                <span>{{xkcouPage}}/</span>
+                                                <span>{{xkcouNo}}</span>
+                                                <p class="xyy" style="height: 20px;" @click='xkcouxyy'>下一页</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                </i-col>
+            </Row>
+
+        <div  class="sure_" id='sure'>
+            <div class="box_sure">
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        用户名
+                    </div>
+                    <input type="text" class="name_content" :value="admChange.user_name" v-model="admChange.user_name">
+                </div>
+                
+                <div class="radio_class">
+                    <div class="box_radio" v-for="(n,item) in radios">
+                        <input type="radio" name="" :id="item.title" value="学生" :checked='item.ischecked'>
+                        <label :for="item.title" @click='radioChoo(n)'></label>
+                        <p class="radio_name">{{item.name}}</p>
+                    </div>
+                </div>
+                <div class="sure_con">
+                    <div class="sure_qd" @click='changeInfo()'>确定</div>
+                    <div class="sure_qx" @click='quxiao'>取消</div>
+                </div>
+            </div>
+        </div>
+        <div :class='stuch'>
+        <div class="box_sure">
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        学号
+                    </div>
+                    <input type="text" class="name_content" :value="changestudent.student_sno" v-model="changestudent.student_sno">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        姓名
+                    </div>
+                    <input type="text" class="name_content" :value="changestudent.student_name" v-model="changestudent.student_name">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        出生日期
+                    </div>
+                    <input type="text" class="name_content" :value="changestudent.student_data" v-model="changestudent.student_data">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        班级
+                    </div>
+                    <input type="text" class="name_content" :value="changestudent.student_class" v-model="changestudent.student_class">
+                </div>
+                
+                <div class="sure_con">
+                    <div class="sure_qd" @click="surechangestu">确定</div>
+                    <div class="sure_qx" @click='stuch="stuch_"'>取消</div>
+                </div>
+            </div>
+            
+        </div>
+        <div :class='teachansae'>
+        <div class="box_sure">
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        工号
+                    </div>
+                    <input type="text" class="name_content" :value="teachansa.teacher_tno" v-model="teachansa.teacher_tno">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        姓名
+                    </div>
+                    <input type="text" class="name_content" :value="teachansa.teacher_name" v-model="teachansa.teacher_name">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        出生日期
+                    </div>
+                    <input type="text" class="name_content" :value="teachansa.teacher_data" v-model="teachansa.teacher_data">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        课程
+                    </div>
+                    <input type="text" class="name_content" :value="teachansa.course.course_name" v-model="teachansa.course_name">
+                </div>
+                
+                <div class="sure_con">
+                    <div class="sure_qd" @click="sureTea">确定</div>
+                    <div class="sure_qx" @click='teachansae="teachansae_"'>取消</div>
+                </div>
+            </div>
+            
+        </div>
+       
+        <div :class='teacourchansae'>
+        <div class="box_sure">
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        课程号
+                    </div>
+                    <input type="text" class="name_content" :value="teacouchansa.course_cno" v-model="teacouchansa.course_cno">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        课程名
+                    </div>
+                    <input type="text" class="name_content" :value="teacouchansa.course_name" v-model="teacouchansa.course_name">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        课程信息
+                    </div>
+                    <input type="text" class="name_content" :value="teacouchansa.course_information" v-model="teacouchansa.course_information">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        第几周
+                    </div>
+                    <input type="text" class="name_content" :value="teacouchansa.classTime.class_weekend" v-model="teacouchansa.classTime.class_weekend">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        第几节
+                    </div>
+                    <input type="text" class="name_content" :value="teacouchansa.classTime.class_time" v-model="teacouchansa.classTime.class_time">
+                </div>
+                <div class="sure_con">
+                    <div class="sure_qd" @click="surechanTea">确定</div>
+                    <div class="sure_qx" @click='teacourchansae="teacourchansae_"'>取消</div>
+                </div>
+            </div>
+            
+        </div>
+         <div :class='gradesliss'>
+        <div class="box_sure">
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        学号
+                    </div>
+                    <input type="text" class="name_content" :value="gradeslist.student.student_sno" v-model="gradeslist.student.student_sno">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        姓名
+                    </div>
+                    <input type="text" class="name_content" :value="gradeslist.student.student_name" v-model="gradeslist.student.student_name">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        课程名
+                    </div>
+                    <input type="text" class="name_content" :value="gradeslist.course.course_name" v-model="gradeslist.course.course_name">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        任课教师
+                    </div>
+                    <input type="text" class="name_content" :value="gradeslist.teacher.teacher_name" v-model="gradeslist.teacher.teacher_name">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        成绩
+                    </div>
+                    <input type="text" class="name_content" :value="gradeslist.score" v-model="gradeslist.score">
+                </div>
+                
+                <div class="sure_con">
+                    <div class="sure_qd" @click="sureGrades">确定</div>
+                    <div class="sure_qx" @click='gradesliss="gradesList_"'>取消</div>
+                </div>
+            </div>
+            
+        </div>
+        <div :class='addcourse'>
+        <div class="box_sure">
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        课程号
+                    </div>
+                    <input type="text" class="name_content"  v-model="addcou.course_cno">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        课程名
+                    </div>
+                    <input type="text" class="name_content" v-model="addcou.course_name">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        课程信息
+                    </div>
+                    <input type="text" class="name_content" v-model="addcou.course_information">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        第几周
+                    </div>
+                    <input type="text" class="name_content" v-model="addcou.classTime.class_weekend">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        第几节
+                    </div>
+                    <input type="text" class="name_content" v-model="addcou.classTime.class_time">
+                </div>
+                <div class="sure_con">
+                    <div class="sure_qd" @click="addCourse">确定</div>
+                    <div class="sure_qx" @click='addcourse="addcourse_"'>取消</div>
+                </div>
+            </div>
+            
+        </div>
+        <div class='addstudent' v-show="addstu===1">
+        	<div class='boxstudeng box_sure'>
+        	<div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                       学号
+                    </div>
+                    <input type="text" class="name_content" v-model="addstudentt.student_sno">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        姓名
+                    </div>
+                    <input type="text" class="name_content" v-model="addstudentt.student_name">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        班级
+                    </div>
+                    <input type="text" class="name_content" v-model="addstudentt.student_class">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+            密码           
+                    </div>
+                    <input type="text" class="name_content" v-model="addstudentt.password">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        出生日期
+                    </div>
+                    <input type="text" class="name_content" v-model="addstudentt.student_data">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                       地址
+                    </div>
+                    <input type="text" class="name_content" v-model="addstudentt.address">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        电话
+                    </div>
+                    <input type="text" class="name_content" v-model="addstudentt.student_phone">
+                </div>
+        	<div class="sure_con">
+                    <div class="sure_qd" @click="addstudente">确定</div>
+                    <div class="sure_qx" @click='addstu=0'>取消</div>
+                </div>
+        	</div>
+        </div>
+        <div class='addstudent' v-show="addteaa===1">
+        	<div class='boxstudeng box_sure'>
+        	<div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                       工号
+                    </div>
+                    <input type="text" class="name_content" v-model="addteaater.teacher_tno" required="required">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        姓名
+                    </div>
+                    <input type="text" class="name_content" v-model="addteaater.teacher_name" required="required">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                       课程号
+                    </div>
+                    <input  type="text" class="name_content" v-model="addteaater.teacher_course_id" required="required">
+                    
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+            密码           
+                    </div>
+                    <input type="text" class="name_content" v-model="addteaater.teacher_password" required="required">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        出生日期
+                    </div>
+                    <input type="text" class="name_content" v-model="addteaater.teacher_data" required="required">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                       地址
+                    </div>
+                    <input type="text" class="name_content" v-model="addteaater.teacher_address" required="required">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        电话
+                    </div>
+                    <input type="text" class="name_content" v-model="addteaater.teacher_phone" required="required">
+                </div>
+        	<div class="sure_con">
+                    <div class="sure_qd" @click="addteacher">确定</div>
+                    <div class="sure_qx" @click='addteaa=0;addteaater={}'>取消</div>
+                </div>
+        	</div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    flag: 6,
+                    adminsearch:{
+                    	type:'用户名'
+                    },
+                    i:0,
+                    gradeses:"",
+                    addteaater:{},
+                    gradestype:'学号',
+                    addcourse:"addcourse_",
+                    addcou:{},
+                    addstu:0,
+                    addstudentt:{},
+                    sure:'sure_',
+                    stuch:'stuch_',
+                    teachansae:"teachansae_",
+                    teacourchansae:"teacourchansae_",
+                    teacouchansa:{},
+                    gradesliss:"gradesList_",
+                    gradeslist:{},
+                    coursesearch:{},
+                    teasearch:{},
+                    courseList:[
+                       
+                    ],
+                    teaList:[
+                    ],
+                    stuList:[
+                        
+                    ],
+                    yonghu: [
+
+                    ],
+                    radios: [
+                        {
+                            name: '学生',
+                            title: 'stu',
+                            ischecked: false
+                        },
+                        {
+                            name: '教师',
+                            title: 'tea',
+                            ischecked: false
+                        },
+                        {
+                            name: '管理员',
+                            title: 'adm',
+                            ischecked: false
+                        }
+                    ],
+                    adminPage:1,
+                    addteaa:0,
+                    xuankeseaddd:{
+                    	type:"学号"
+                    },
+                    admChange:{},
+                    changestudent:{},
+                    teachansa:{},
+                    stusearch:{
+                    	student_name:""
+                    },
+                    searchType:"学号",
+                    teaType:"工号",
+                    courseType:"课程名",
+                    adminNo:'',
+                    stuPage:1,
+                    stuNo:'',
+                    teaNo:'',
+                    teaPage:1,
+                    couPage:1,
+                    couNo:'',
+                    xkcouPage:1,
+                    xkcouNo:'',
+                    title:'用户管理',
+                    name:'学生信息',
+                    m:0
+                }
+            },
+            created () {
+            	axios({
+                    method: "post",
+                    changeOrigin: "true",
+                    url: "/admin/AdministorSelUser",
+                    transformRequest: [
+                        function (data) {
+                            // 对 data 进行任意转换处理
+                            return Qs.stringify(data);
+                        }
+                    ],
+                    data: {
+                    	user_name:'',
+                    	pageNopss:this.adminPage
+                    }
+                }).then(result => {
+                   this.yonghu=result.data.user
+                   this.adminNo=result.data.pageNo
+                   console.log(result.data)
+                })
+            },
+            methods: {
+                radioChoo(index) {
+                    // kk().then(res => {
+                    //     // this[index]
+                    // })
+                    
+                    this.radios.forEach((element, i) => {
+                        if (index == i) {
+                            element.ischecked = true
+                            console.log(element)
+                            this.admChange.student_name=element.name
+                        } else {
+                            element.ischecked = false
+                        }
+                    });
+                    console.log(this.admChange)
+                },
+                /* 修改用户 */
+                changeInfo() {
+                	console.log(123)
+                    document.getElementById("sure").className="sure_"
+                    if(confirm("确定修改？")){
+                    	
+                    	 axios({
+                             method: "post",
+                             changeOrigin: "true",
+                             url: "/admin/AdminUpdateUser",
+                             transformRequest: [
+                                 function (data) {
+                                     // 对 data 进行任意转换处理
+                                     return Qs.stringify(data);
+                                 }
+                             ],
+                             data: {
+                            	 user_name:this.admChange.user_name,
+                            	 user_type:this.admChange.student_name
+                             }
+                         }).then(result => {
+                             this.yonghu=result.data
+                             alert("修改成功")
+                            console.log(result.data)
+                         })
+                    }
+                },
+                quxiao() {
+                	console.log(123)
+                    document.getElementById("sure").className="sure_"
+                },
+                changeTitle(m, n, q) {
+                        this.flag = m
+                        this.title = n
+                        this.name = q
+                    },
+                    changeI(index){
+                        document.getElementById("sure").className="sure"
+                        this.admChange=this.yonghu[index]
+                         this.radios.forEach((item,i)=>{
+                        	if(item.name==this.yonghu[index].user_type){
+                        		item.ischecked=true
+                        	}else{
+                        		item.ischecked = false
+                        	}
+                        }) 
+                        console.log(this.yonghu[index])
+                    },
+                    /* 登录用户 */
+                    admin(m, n, q){
+                    	this.flag = m
+                        this.title = n
+                        this.name = q
+                        axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/admin/AdministorSelUser",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	user_name:'',
+                            	pageNopss:this.adminPage
+                            }
+                        }).then(result => {
+                           this.yonghu=result.data.user
+                           this.adminNo=result.data.pageNo
+                           console.log(result.data)
+                        })
+                    },
+                    /* 删除用户 */
+                    spliceI(index){
+                    	console.log({user_name:this.yonghu[index].user_name,
+                            	user_type:this.yonghu[index].user_type})
+                            	if(confirm("确定删除？")){
+                            		
+                    	axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/admin/AdminDelUser",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	user_name:this.yonghu[index].user_name,
+                            	user_type:this.yonghu[index].user_type
+                            }
+                        }).then(result => {
+
+                            this.yonghu=result.data
+                            alert("删除成功")
+                           console.log(result.data)
+                        })
+                            	}
+                    },
+                    changestu(index){
+                    	this.stuch='stuch'
+                    		this.changestudent=this.stuList[index]
+                    		console.log(this.stuList[index])
+                    },
+                    /* 修改学生信息 */
+                    surechangestu(){
+                    	console.log({student_name:this.changestudent.student_name,
+                            	student_class:this.changestudent.student_class,
+                            	student_sno:this.changestudent.student_sno,
+                            	student_data:this.changestudent.student_data,
+                            	student_phone:this.changestudent.student_phone,
+                            	student_address:this.changestudent.student_address})
+              		axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/studentUpdate",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	student_name:this.changestudent.student_name,
+                            	student_class:this.changestudent.student_class,
+                            	student_sno:this.changestudent.student_sno,
+                            	student_data:this.changestudent.student_data,
+                            	student_phone:this.changestudent.student_phone,
+                            	student_address:this.changestudent.student_address
+                            }
+                        }).then(result => {
+                        	if(result.data){
+                        		this.stuch='stuch_'
+                        		alert("修改成功")
+                        		
+                        	}
+                           console.log(result.data)
+                        })
+                    },
+                    stuCtroll(m, n, q){
+                    	this.stuPage=1
+                    	this.flag = m
+                        this.title = n
+                        this.name = q
+                        axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/teacher/teaSelStudentsPage",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	student_name:'',
+                            	student_class:'',
+                            	student_sno:'',
+                            	teacher_tno:'',
+                            	pageNopss:1
+                            }
+                        }).then(result => {
+                        	this.stuList=result.data.student
+                        	this.stuNo=result.data.pageNo
+                           console.log(result.data)
+                        })
+                    },
+                    teaCtroll(m,n,q){
+                    	this.couPage=1
+                    	this.flag = m
+                        this.title = n
+                        this.name = q
+                        axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/courseSel",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	course_name:'',
+                            	course_cno:'',
+                            	pageNopss:1
+                            }
+                        }).then(result => {
+                        	this.teaList=result.data.course
+                        	this.couNo=result.data.pageNo
+                           console.log(result.data)
+                        })
+                    },
+                    changeTea(index){
+                    	this.teachansa=this.teaList[index]
+                    	this.teachansae="teachansae"
+                    	console.log(this.teachansa)
+                    },
+                    sureTea(){
+                    	console.log({
+                    		teacher_tno:this.teachansa.teacher_tno,
+                            	teacher_name:this.teachansa.teacher_name,
+                            	teacher_data:this.teachansa.teacher_data,
+                            	teacher_phone:this.teachansa.teacher_phone,
+                            	teacher_course_id:this.teachansa.teacher_course_id,
+                            	teacher_address:this.teachansa.teacher_address,
+                    	})
+                    	axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/teacher/teacherUpdateInformation",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	teacher_tno:this.teachansa.teacher_tno,
+                            	teacher_name:this.teachansa.teacher_name,
+                            	teacher_data:this.teachansa.teacher_data,
+                            	teacher_phone:this.teachansa.teacher_phone,
+                            	teacher_course_id:this.teachansa.teacher_course_id,
+                            	teacher_address:this.teachansa.teacher_address,
+                            }
+                        }).then(result => {
+                        	if(result.data){
+                        		this.teachansae="teachansae_"
+                        	}
+                           console.log(result.data)
+                        })
+                    },
+                    changeCoursetea(index){
+                    	this.teacourchansae="teacourchansae"
+                    	this.teacouchansa=this.teaList[index]
+                    	console.log(this.teaList[index])
+                    },
+                    surechanTea(){
+                    	console.log({course_cno:this.teacouchansa.course_cno,
+                        	course_name:this.teacouchansa.course_name,
+                        	course_information:this.teacouchansa.course_information,
+                        	class_weekend:this.teacouchansa.classTime.class_weekend,
+                        	class_time:this.teacouchansa.classTime.class_time,})
+                    	axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/courses/coursesUpdate",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	course_cno:this.teacouchansa.course_cno,
+                            	course_name:this.teacouchansa.course_name,
+                            	course_information:this.teacouchansa.course_information,
+                            	class_weekend:this.teacouchansa.classTime.class_weekend,
+                            	class_time:this.teacouchansa.classTime.class_time,
+                            	pageNopss:1
+                            }
+                        }).then(result => {
+                        	if(result.data){
+                        		this.teaList=result.data.course
+                        		this.teacourchansae="teacourchansae_"
+                        	}
+                        	if(result.data.messgae=="0"){
+                          		alert("修改失败！课程时间冲突！");
+                          	}else{
+                          		alert("修改成功！！");	
+                          	}
+                           console.log(result.data)
+                        })
+                    },
+                    xkmanger(m,n,q){
+                    	this.xkcouPage=1
+                    	this.flag = m
+                        this.title = n
+                        this.name = q
+                        axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/student/courses",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: {
+                            	student_sno:'',
+                            	course_cno:'',
+                            	teacher_tno:'',
+                            	pageNopss:1
+                            }
+                        }).then(result => {
+                        	if(result.data){
+                        		this.courseList=result.data.score
+                        		this.xkcouNo=result.data.pageNo
+                        	}
+                           console.log(result.data,result.data.pageNo)
+                        })
+                    },
+                    gradesChange(index){
+                    	this.gradeslist=this.courseList[index]
+                    	this.gradesliss="gradesList"
+                    	
+                    },
+                    sureGrades(){
+                    	console.log(this.gradeslist)
+            		 axios({
+                         method: "post",
+                         changeOrigin: "true",
+                         url: "/teacher/teacherScore",
+                         transformRequest: [
+                             function (data) {
+                                 // 对 data 进行任意转换处理
+                                 return Qs.stringify(data);
+                             }
+                         ],
+                         data: {
+                        	 userName:this.gradeslist.student.student_sno,
+                         	course_cno:this.gradeslist.course.course_cno,
+                         	score:this.gradeslist.score,
+                         }
+                     }).then(result => {
+                    	 if(result.data){
+                    		 alert("修改成功")
+                         	this.gradesliss="gradesList_"
+                    	 }
+                        console.log(result.data)
+                     })
+                    },
+                    /* 搜索 */
+                    /* 用户 */
+                    admSearch(){
+                    	this.adminPage=1
+                    	var data ={
+                    			user_name:this.adminsearch.con,
+                            	user_type:this.adminsearch.type,
+                            	pageNopss:this.adminPage
+                    	}
+                    	console.log(data)
+                    	axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/admin/AdministorSelUser",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: data
+                        }).then(result => {
+                           this.yonghu=result.data.user
+                           this.adminNo=result.data.pageNo
+                           console.log(result.data)
+                        })
+                    },
+                   /*  学生 */
+                   stuSearch(){
+                    	this.stuPage=1
+                    	this.stusearch.student_sno=""
+                    	if(this.searchType=="学号"){
+                    		this.stusearch.student_sno=this.stusearch.con
+                    		this.stusearch.student_name=""
+                    		this.stusearch.student_class=""
+                    		this.stusearch.teacher_tno=""
+                             this.stusearch.pageNopss=1
+                    	}else if(this.searchType=="班级"){
+                    		this.stusearch.student_sno=""
+                    		this.stusearch.student_name=""
+                    		this.stusearch.teacher_tno=""
+                             this.stusearch.pageNopss=1
+                    		this.stusearch.student_class=this.stusearch.con
+                    	}else if(this.searchType=="姓名"){
+
+                    		this.stusearch.student_sno=""
+                        	this.stusearch.student_name=this.stusearch.con
+                        	this.stusearch.student_class=""
+                        	this.stusearch.teacher_tno=""
+                        	this.stusearch.pageNopss=1
+                    	}
+                    	console.log(this.stusearch)
+                    	var data={
+                    			student_name:this.stusearch.student_name,
+                    			student_class:this.stusearch.student_class,
+                    			student_sno:this.stusearch.student_sno,
+                    			teacher_tno:"",
+                    			pageNopss:1
+                    	}
+                    	console.log(data)
+                    	axios({
+                            method: "post",
+                            changeOrigin: "true",
+                            url: "/teacher/teaSelStudentsPage",
+                            transformRequest: [
+                                function (data) {
+                                    // 对 data 进行任意转换处理
+                                    return Qs.stringify(data);
+                                }
+                            ],
+                            data: data
+                        }).then(result => {
+                        	this.stuList=result.data.student
+                        	this.stuNo=result.data.pageNo
+                           console.log(result.data)
+                        })
+                    },
+                    /*  老师 */
+                    teaSearch(){
+                    	this.teaPage=1
+                    	console.log(this.teaType)
+                     	if(this.teaType=="工号"){
+                     		this.teasearch.teacher_tno=this.teasearch.con
+                     		this.teasearch.teacher_name=""
+                            this.stusearch.pageNopss=1
+                     	}else if(this.teaType=="姓名"){
+                     		this.teasearch.teacher_tno=""
+                     		this.teasearch.teacher_name=this.teasearch.con
+                            this.stusearch.pageNopss=1
+                     	}
+                     	var data={
+                     		teacher_name:this.teasearch.teacher_name,
+                     		teacher_tno:this.teasearch.teacher_tno,
+                     		pageNopss:1
+                     	}
+                     	console.log(data)
+                     	axios({
+                             method: "post",
+                             changeOrigin: "true",
+                             url: "/admin/adminSelTeacherPage",
+                             transformRequest: [
+                                 function (data) {
+                                     // 对 data 进行任意转换处理
+                                     return Qs.stringify(data);
+                                 }
+                             ],
+                             data: data
+                         }).then(result => {
+                         	this.teaList=result.data.teacher
+                         	this.teaNo=result.data.pageNo
+                            console.log(result.data)
+                         })
+                     },
+                     //查询老师
+                     selTeache(m,n,q){
+                    	 this.teaPage=1
+                    	 this.flag = m
+                         this.title = n
+                         this.name = q
+                      	var data={
+                      		teacher_name:"",
+                      		teacher_tno:"",
+                      		pageNopss:1
+                      	}
+                      	axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/admin/adminSelTeacherPage",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: data
+                          }).then(result => {
+                          	this.teaList=result.data.teacher
+                          	this.teaNo=result.data.pageNo
+                             console.log(result.data)
+                          })
+                      },
+                      //搜索课程
+                      courseSearch(){
+                    	  var data={}
+                    	  if(this.courseType=='课程名'){
+                    		  data.course_name=this.coursesearch.con,
+                    		  data.course_cno='',
+                    		  data.pageNopss=1
+                    	  }else if(this.courseType=='课程号'){
+                    		  data.course_name='',
+                    		  data.course_cno=this.coursesearch.con,
+                    		  data.pageNopss=1
+                    	  }
+                    	  console.log(data)
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/courseSel",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: data
+                          }).then(result => {
+                          	this.teaList=result.data.course
+                          	this.couNo=result.data.pageNo
+                             console.log(result.data)
+                          })
+                      },
+                      //添加课程
+                      
+                      addCourse(){
+                    	 
+                    	  console.log({course_cno:this.addcou.course_cno,
+                        	  course_name:this.addcou.course_name,
+                        	  course_information:this.addcou.course_information,
+                        	  class_weekend:this.addcou.classTime.class_weekend,
+                        	  class_time:this.addcou.classTime.class_time})
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/courses/coursesIns",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	  course_cno:this.addcou.course_cno,
+                            	  course_name:this.addcou.course_name,
+                            	  course_information:this.addcou.course_information,
+                            	  class_weekend:this.addcou.classTime.class_weekend,
+                            	  class_time:this.addcou.classTime.class_time,
+                            	  pageNopss:1
+                              }
+                          }).then(result => {
+                          	this.teaList=result.data.course
+                          	this.addcourse="addcourse_"
+                          	if(result.data.messgae=="0"){
+                          		alert("添加失败！课程名或课程时间冲突！");
+                          	}else{
+                          		alert("添加课程成功！！");	
+                          	}
+                            console.log(result.data)
+                          })
+                      },
+                      //成绩搜索
+                      searchGrades(){
+                    	  this.xkcouPage=1
+                    	  console.log(this.gradestype)
+                    	  if(this.gradestype=="学号"){
+                       		this.gradeses.student_sno=this.gradeses.con
+                       		this.gradeses.student_name=""
+                       		this.gradeses.teacher_name=""
+                       		this.gradeses.course_name=""
+                            this.stusearch.pageNopss=1
+                       	}else if(this.gradestype=="学生姓名"){
+                       		this.gradeses.student_sno=""
+                       		this.gradeses.student_name=this.gradeses.con
+                       		this.gradeses.teacher_name=""
+                       		this.gradeses.course_name=""
+                            this.stusearch.pageNopss=1
+                       	}else if(this.gradestype=="教师名"){
+                       		this.gradeses.student_sno=""
+                       		this.gradeses.student_name=""
+                       		this.gradeses.teacher_name=this.gradeses.con
+                       		this.gradeses.course_name=""
+                            this.stusearch.pageNopss=1
+                        }else if(this.gradestype=="课程名"){
+                           		this.gradeses.student_sno=""
+                           		this.gradeses.student_name=""
+                           		this.gradeses.teacher_name=""
+                           		this.gradeses.course_name=this.gradeses.con
+                                this.stusearch.pageNopss=1
+                               	}
+                    	  console.log({student_sno:this.gradeses.student_sno,
+                              	student_name:this.gradeses.student_name,
+                              	teacher_name:this.gradeses.teacher_name,
+                              	course_name:this.gradeses.course_name,
+                              	pageNopss:1})
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/student/coursesStu",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                              	student_sno:this.gradeses.student_sno,
+                              	student_name:this.gradeses.student_name,
+                              	teacher_name:this.gradeses.teacher_name,
+                              	course_name:this.gradeses.course_name,
+                              	pageNopss:1
+                              }
+                          }).then(result => {
+                          	if(result.data){
+                          		this.courseList=result.data.score
+                          		this.xkcouNo=result.data.pageNo
+                          	}
+                             console.log(result.data)
+                          })
+                      },
+                      addstudente(){
+                    	  console.log({
+                    		  student_name:this.addstudentt.student_sno,
+                            	student_sno:this.addstudentt.student_sno,
+                            	student_password:this.addstudentt.password,
+                            	student_data:this.addstudentt.student_data,
+                            	student_phone:this.addstudentt.student_phone,
+                            	student_address:this.addstudentt.address,
+                            	student_class:this.addstudentt.student_class
+                    	  })
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/user/studentRegister",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	student_name:this.addstudentt.student_sno,
+                            	student_sno:this.addstudentt.student_sno,
+                            	student_password:this.addstudentt.password,
+                            	student_data:this.addstudentt.student_data,
+                            	student_phone:this.addstudentt.student_phone,
+                            	student_address:this.addstudentt.address,
+                            	student_class:this.addstudentt.student_class
+                              }
+                          }).then(result => {
+                          	if(result.data){
+                          		this.addstu=0;
+                          		alert("添加成功 ")
+                          	}
+                             console.log(result.data)
+                          })
+                      },
+                      restpass(n){
+                    	  console.log(this.admChange)
+                    	  axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/user/userLogin",
+                        transformRequest: [
+                          function(data) {
+                            // 对 data 进行任意转换处理
+                            return Qs.stringify(data);
+                          }
+                        ],
+                        data: {
+                        	userName: this.admChange.username,
+                        	userPwd: this.admChange.password,
+                        	type:this.admChange.student_name
+                        }
+                      }).then(result => {
+                        // 注意 通过axios获取的数据，都在result.data中放着  
+                        console.log(result.data)
+                    	  if(result.data=='stu'||result.data=='tea'||result.data=='admin'){
+                    		  this.i=1
+                    	  }else{
+                    		  alert("错误")
+                    	  }
+                        
+                        })
+                    	  
+                      },
+                      restpasswordre(){
+                    	  if(this.admChange.restpassword==this.admChange.restpassword2){
+                    		  axios({
+                                  method: "post",
+                                  changeOrigin: "true",
+                                  url: "/user/updataPassword",
+                                  transformRequest: [
+                                    function(data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                    }
+                                  ],
+                                  data: {
+                                  	userName: this.admChange.username,
+                                  	userPassword: this.admChange.password,
+                                  	usertype:this.admChange.student_name
+                                  }
+                                }).then(result => {
+                                  // 注意 通过axios获取的数据，都在result.data中放着  
+                                  console.log(result.data)
+                              	  if(result.data){
+                              		  alert("成功")
+                              		  this.i=0
+                              	  }else{
+                              		  alert("错误")
+                              	  }
+                                  
+                                  })
+                    	  }else{
+                    		  alert("错误")
+                    	  }
+                    	 
+                      },
+                      addteacher(){
+                    	  var dat=this.addteaater
+                    	  if(dat.teacher_name=='' || dat.teacher_tno=='' || dat.teacher_password=='' || dat.teacher_data=='' || dat.teacher_phone=='' || dat.teacher_address=='' || dat.teacher_course_id==''){
+                    		  alert("不能为空")
+                    	  }else{
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/user/teacherRegister",
+                              transformRequest: [
+                                function(data) {
+                                  // 对 data 进行任意转换处理
+                                  return Qs.stringify(data);
+                                }
+                              ],
+                              data: {
+                            	  teacher_name:this.addteaater.teacher_name,
+                            	  teacher_tno:this.addteaater.teacher_tno,
+                            	  teacher_password:this.addteaater.teacher_password,
+                            	  teacher_data:this.addteaater.teacher_data,
+                            	  teacher_phone:this.addteaater.teacher_phone,
+                            	  teacher_address:this.addteaater.teacher_address,
+                            	  teacher_course_id:this.addteaater.teacher_course_id
+                              }
+                            }).then(result => {
+                              // 注意 通过axios获取的数据，都在result.data中放着  
+                              console.log(result.data)
+                          	  if(result.data){
+                          		  alert("成功")
+                          		  this.addteaater={}
+                          		  this.addteaa=0
+                          	  }else{
+                          		  alert("错误")
+                          		  this.addteaater={}
+                          	  }
+                              
+                              })
+                    	  }
+                              
+                      },
+                      xuankSearch(){
+                    	  this.xkcouPage=1
+                    	  var data={}
+                    	  if(this.xuankeseaddd.type=='学号'){
+                    		  data.student_name='',
+                    		  data.student_class='',
+                    		  data.student_sno=this.xuankeseaddd.con,
+                    		  data.teacher_tno='',
+                    		  data.pageNopss=1
+                    	  }else if(this.xuankeseaddd.type=='班级'){
+                    		  data.student_name='',
+                    		  data.student_class=this.xuankeseaddd.con,
+                    		  data.student_sno='',
+                    		  data.teacher_tno='',
+                    		  data.pageNopss=1
+                    	  }
+                    	  console.log(data)
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/teacher/teacherChange",
+                              transformRequest: [
+                                function(data) {
+                                  // 对 data 进行任意转换处理
+                                  return Qs.stringify(data);
+                                }
+                              ],
+                              data: data
+                            }).then(result => {
+                              // 注意 通过axios获取的数据，都在result.data中放着  
+                              console.log(result.data.score)
+                              this.courseList=result.data.score
+                              this.xkcouNo=result.data.pageNo
+                              })
+
+                      },
+                      /* 分页 */
+                      /* 用户 */
+                      adminxyy(){
+                    	  this.adminPage+=1
+                    	  if(this.adminPage>=this.adminNo){
+                    		  this.adminPage=this.adminNo
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/admin/AdministorSelUser",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                              	user_name:'',
+                              	pageNopss:this.adminPage
+                              }
+                          }).then(result => {
+                             this.yonghu=result.data.user
+                             
+                             console.log(result.data)
+                          })
+                      },
+                      adminsyy(){
+                    	  this.adminPage-=1
+                    	  if(this.adminPage<=1){
+                    		  this.adminPage=1
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/admin/AdministorSelUser",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                              	user_name:'',
+                              	pageNopss:this.adminPage
+                              }
+                          }).then(result => {
+                             this.yonghu=result.data.user
+                             
+                             console.log(result.data)
+                          })
+                      },
+                      /* 学生 */
+                      stuxyy(){
+                    	  this.stuPage+=1
+                    	  if(this.stuPage>=this.stuNo){
+                    		  this.stuPage=this.stuNo
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/teacher/teaSelStudentsPage",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	  student_name:'',
+                              	student_class:'',
+                              	student_sno:'',
+                              	teacher_tno:'',
+                                	pageNopss:this.stuPage
+                              }
+                          }).then(result => {
+                             this.stuList=result.data.student
+                             
+                             console.log(result.data)
+                          })
+                      },
+                      stusyy(){
+                    	  console.log(this.stusearch)
+                    	  this.stuPage-=1
+                    	  if(this.stuPage<=1){
+                    		  this.stuPage=1
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/teacher/teaSelStudentsPage",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	student_name:this.stusearch.student_name,
+                      			student_class:this.stusearch.student_class,
+                      			student_sno:this.stusearch.student_sno,
+                            	teacher_tno:'',
+                              	pageNopss:this.stuPage
+                              }
+                          }).then(result => {
+                             this.stuList=result.data.student
+                             
+                             console.log(result.data)
+                          })
+                      },
+                      /* 教师 */
+                      teaxyy(){
+                    	  this.teaPage+=1
+                    	  if(this.teaPage>=this.teaNo){
+                    		  this.teaPage=this.teaNo
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/admin/adminSelTeacherPage",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	  	teacher_name:"",
+                            		teacher_tno:"",
+                                	pageNopss:this.teaPage
+                              }
+                          }).then(result => {
+                             this.teaList=result.data.teacher
+                             
+                             console.log(result.data)
+                          })
+                      },
+                      teasyy(){
+                    	  this.teaPage-=1
+                    	  if(this.teaPage<=1){
+                    		  this.teaPage=1
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/admin/adminSelTeacherPage",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	  teacher_name:"",
+                          		teacher_tno:"",
+                              	pageNopss:this.teaPage
+                              }
+                          }).then(result => {
+                             this.teaList=result.data.teacher
+                             
+                             console.log(result.data)
+                          })
+                      },
+                      /* 课程信息 */
+                      couxyy(){
+                    	  this.couPage+=1
+                    	  if(this.couPage>=this.couNo){
+                    		  this.couPage=this.couNo
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/courseSel",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	  course_name:'',
+                              	course_cno:'',
+                                	pageNopss:this.couPage
+                              }
+                          }).then(result => {
+                          	this.teaList=result.data.course
+                             
+                             console.log(result.data)
+                          })
+                      },
+                      cousyy(){
+                    	  this.couPage-=1
+                    	  if(this.couPage<=1){
+                    		  this.couPage=1
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/courseSel",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	  course_name:'',
+                                	course_cno:'',
+                                  	pageNopss:this.couPage
+                              }
+                          }).then(result => {
+                             this.teaList=result.data.course
+                             
+                             console.log(result.data)
+                          })
+                      },
+                      xkcouxyy(){
+                    	  this.xkcouPage+=1
+                    	  if(this.xkcouPage>=this.xkcouNo){
+                    		  this.xkcouPage=this.xkcouNo
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/student/courses",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	  student_sno:'',
+                              	course_cno:'',
+                              	teacher_tno:'',
+                              	pageNopss:this.xkcouPage
+                              }
+                          }).then(result => {
+                          	this.courseList=result.data.score
+                             
+                             console.log(result.data)
+                          })
+                      },
+                      xkcousyy(){
+                    	  this.xkcouPage-=1
+                    	  if(this.xkcouPage<=1){
+                    		  this.xkcouPage=1
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/student/courses",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	  student_sno:'',
+                              	course_cno:'',
+                              	teacher_tno:'',
+                              	pageNopss:this.xkcouPage
+                              }
+                          }).then(result => {
+                             this.courseList=result.data.score
+                             console.log(result.data)
+                          })
+                      },
+                      xkcouxyy(){
+                    	  this.xkcouPage+=1
+                    	  if(this.xkcouPage>=this.xkcouNo){
+                    		  this.xkcouPage=this.xkcouNo
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/student/courses",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	  student_sno:'',
+                              	course_cno:'',
+                              	teacher_tno:'',
+                              	pageNopss:this.xkcouPage
+                              }
+                          }).then(result => {
+                          	this.courseList=result.data.score
+                             
+                             console.log(result.data)
+                          })
+                      },
+                      xkcousyy(){
+                    	  this.xkcouPage-=1
+                    	  if(this.xkcouPage<=1){
+                    		  this.xkcouPage=1
+                    	  }
+                    	  axios({
+                              method: "post",
+                              changeOrigin: "true",
+                              url: "/student/courses",
+                              transformRequest: [
+                                  function (data) {
+                                      // 对 data 进行任意转换处理
+                                      return Qs.stringify(data);
+                                  }
+                              ],
+                              data: {
+                            	  student_sno:'',
+                              	course_cno:'',
+                              	teacher_tno:'',
+                              	pageNopss:this.xkcouPage
+                              }
+                          }).then(result => {
+                             this.courseList=result.data.score
+                             console.log(result.data)
+                          })
+                      },
+                      exit(){
+                    	  window.location.href='/exit'
+                      }
+                    
+            },
+            
+        })
+    </script>
+</body>
+
+</html>

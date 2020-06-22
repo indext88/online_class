@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http//mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace创建命名空间 -->
+<mapper namespace="com.onlineclass.dao.StudentDao">
+<!-- 查询所有学生 -->
+<select id="SelStudent" resultType="Student">
+SELECT * from student where 1=1 
+<if test="student_sno!='' and student_sno!=null">
+and student_sno like concat('%',#{student_sno},'%')
+</if>
+<if test="student_name!='' and student_name!=null">
+and student_name like concat('%',#{student_name},'%')
+</if>
+<if test="student_class!='' and student_class!=null">
+and student_class like concat('%',#{student_class},'%')
+</if>
+</select>
+
+<!-- 分页显示学生信息 -->
+<select id="SelStudentPage" resultType="Student">
+SELECT * from student where 1=1 
+<if test="student_sno!='' and student_sno!=null">
+and student_sno like concat('%',#{student_sno},'%')
+</if>
+<if test="student_name!='' and student_name!=null">
+and student_name like concat('%',#{student_name},'%')
+</if>
+<if test="student_class!='' and student_class!=null">
+and student_class like concat('%',#{student_class},'%')
+</if>
+limit ${(pageNo-1)*pageSize},${pageSize}
+</select>
+
+
+<!-- 修改学生信息 -->
+<update id="UpdataStudent" parameterType="Student">
+update student set student_name=#{student_name},student_sno=#{student_sno},student_age=#{student_age},student_data=#{student_data},student_phone=#{student_phone},
+student_address=#{student_address},student_class=#{student_class} where student_sno=#{student_sno}
+</update>
+<!-- 删除学生信息 -->
+<delete id="DelStudent" parameterType="Student">
+DELETE  from student where 1=1 and student_sno=#{student_sno}
+</delete>
+<!-- 添加学生信息 -->
+<insert id="AddStudent" parameterType="Student">
+INSERT into student(student_name,student_sno,student_age,student_data,student_phone,student_address,student_class) 
+values(#{student_name},#{student_sno},#{student_age},#{student_data},#{student_phone},#{student_address},#{student_class})
+</insert>
+</mapper>

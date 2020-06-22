@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>管理员</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <script type="text/javascript" src="http://v1.vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/iview@1.0.1/dist/iview.min.js"></script>
+    <script src="https://at.alicdn.com/t/font_1296423_92fclenj85a.js"></script>
+</head>
+
+<body>
+    <style scoped>
+        #app,
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .layout {
+            border: 1px solid #d7dde4;
+            background: #f5f7f9;
+            position: relative;
+        }
+
+        .layout-breadcrumb {
+            padding: 10px 15px 0;
+        }
+
+        .layout-content {
+            height: 83vh;
+            margin: 15px;
+            overflow: hidden;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        .layout-content-main {
+            padding: 10px;
+        }
+
+        .layout-copy {
+            text-align: center;
+            padding: 10px 0 20px;
+            color: #9ea7b4;
+        }
+
+        .layout-menu-left {
+            background: #464c5b;
+        }
+
+        .layout-header {
+            height: 60px;
+            background: #fff;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+        }
+
+        .layout-logo-left {
+            width: 90%;
+            height: 30px;
+            background: #5b6270;
+            border-radius: 3px;
+            margin: 15px auto;
+        }
+
+        .box_yonghu {
+            width: 100%;
+            height: 82vh;
+            display: flex;
+            flex-direction: column;
+            background: rgba(160, 160, 224, 0.3);
+        }
+
+        .box_title_yonghu {
+            display: flex;
+            width: 99%;
+            height: 50px;
+            align-items: center;
+            background: rgba(10, 32, 56, 0.8);
+            border-radius: 5px;
+            margin: 2px auto 0;
+        }
+
+        .yonghu_item {
+            width: 25%;
+            color: #fff;
+            height: 50px;
+            border-left: 1px solid #EDEDED;
+            padding: 0 0 0 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .box_content {
+            background: #fff;
+            color: #333333;
+            margin: 0;
+            border-bottom: 1px solid #EDEDED;
+            border-radius: 0;
+            margin: 0 auto;
+        }
+
+        .content_yonghu {
+            width: 25%;
+            color: #333333;
+            height: 45px;
+            border-left: 1px solid #EDEDED;
+            padding: 0 0 0 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .yh_change {
+            height: 60%;
+            width: 40%;
+            margin: 0 10px 0 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+            background: rgba(255, 0, 0, 0.8);
+            color: #fff;
+        }
+
+        .yh_splice {
+            height: 60%;
+            width: 40%;
+            color: #f00;
+            border: 1px solid #f00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+        }
+
+        .yonghu_item_cz {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 25%;
+            height: 45px;
+            border-left: 1px solid #EDEDED;
+        }
+
+        
+
+        .orse_con {
+            color: #000;
+            border: 0;
+            height: 45px;
+        }
+
+        .orse_con>p {
+            height: 100%;
+        }
+
+        .fenye {
+            background: #fff;
+            height: 42px;
+            width: 99%;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 50px;
+            border: 1px solid #EDEDED;
+            margin: 0 auto;
+            border: 0;
+        }
+
+        .syy {
+            width: 60px;
+            height: 20px;
+            background: rgba(236, 19, 19, 1);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+            margin: 0 3px 0 0;
+        }
+
+        .xyy {
+            width: 60px;
+            height: 20px;
+            border: 1px solid rgb(236, 19, 19);
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: default;
+            margin: 0 0 0 3px;
+        }
+
+        .sure {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .sure_ {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .box_sure {
+            width: 41%;
+            height: 60%;
+            background: #FFF;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sure_title {
+            font-size: 30px;
+            font-weight: bold;
+            font-family: fontKai;
+            color: #000;
+
+        }
+
+        .sure_con {
+            display: flex;
+            justify-content: space-between;
+            width: 170px;
+            margin: 20px 0 0 0;
+        }
+
+        .sure_qd {
+            width: 70px;
+            height: 30px;
+            background: rgb(24, 11, 14);
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: default;
+        }
+
+        .sure_qx {
+            width: 70px;
+            height: 30px;
+            color: #000;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #000;
+            cursor: default;
+        }
+
+        .singal_name {
+            width: 40%;
+            height: 40px;
+            border: 1px solid rgb(117, 104, 104);
+            margin: 0 0 20px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+
+        }
+
+        @font-face {
+            font-family: fontKai;
+            src: url('kai.ttf');
+        }
+
+        .singal_name_title {
+            font-family: fontKai;
+            height: 39px;
+            width: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            background: rgba(7, 0, 0, 0.7);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .name_content {
+            display: flex;
+            flex: 1;
+            background: rgba(160, 160, 224, 0);
+            border: 0;
+            outline: none;
+            font-family: fontKai;
+            color: #333333;
+            font-size: 15px;
+            font-weight: bold;
+            padding-left: 5px;
+        }
+
+        .box_radio input+label {
+            display: block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #333333;
+            border-radius: 50%;
+        }
+
+        .box_radio input:checked+label {
+            background: #333333;
+            padding: 2px;
+        }
+
+        .radio_class {
+            display: flex;
+            width: 70%;
+            justify-content: space-around;
+            height: 30px;
+        }
+
+        .box_radio {
+            display: flex;
+            align-items: center;
+            font-family: myfont;
+            color: #333333;
+            
+        }
+
+        .radio_name {
+            margin: 0 0 0px 5px;
+            font-family: fontKai;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .box_radio input {
+            display: none;
+        }
+
+        .sure_con {
+            display: flex;
+            justify-content: space-between;
+            width: 59%;
+            margin: 20px 0 0 0;
+        }
+
+        .sure_qd {
+            width: 40%;
+            height: 30px;
+            background: rgb(24, 11, 14);
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: default;
+        }
+
+        .sure_qx {
+            width: 40%;
+            height: 30px;
+            color: #000;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #000;
+            cursor: default;
+        }
+
+        .search_box {
+            display: flex;
+            width: 39%;
+            height: 40px;
+            border: 1px solid #000;
+            padding: 0 0 0 10px;
+            border-radius: 5px;
+            font-family: fontKai;
+            margin: 15px 0 15px 6px;
+            justify-content: space-between;
+        }
+
+        .search_box>input {
+            width: 73%;
+            background: rgba(0, 0, 0, 0);
+            border: 0;
+            outline: none;
+            color: #333333;
+            font-weight: bold;
+            font-size: 15px;
+            letter-spacing: 1px;
+        }
+
+        .search_box>input::placeholder {
+            font-size: 12px;
+        }
+
+        .search_box img {
+            width: 30px;
+            height: 25px;
+        }
+
+        .sousuo {
+            height: 100%;
+            background: rgba(10, 32, 56, 0.8);
+            display: flex;
+            flex: 1;
+            border-radius: 0 4px 4px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 0 0 1px;
+        }
+
+        .box_title {
+            display: flex;
+            width: 99%;
+            height: 51px;
+            align-items: center;
+            background: rgba(10, 32, 56, 0.8);
+            border-radius: 5px;
+            margin: 0 auto;
+        }
+
+        .titleWid {
+            width: 20%;
+            color: #fff;
+            height: 50px;
+            border-left: 1px solid #EDEDED;
+            padding: 0 0 0 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .title_id {
+            background: #fff;
+            border-bottom: 1px solid #d7dde4;
+            color: #333333;
+            display: flex;
+        }
+
+        .qdxk {
+            width: 60%;
+            height: 60%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(238, 13, 13, 0.8);
+            color: #fff;
+            border-radius: 5px;
+            cursor: default;
+            font-size: 8px;
+            margin-left: 35px;
+        }
+
+        .title_tj {
+            background: #fff;
+            border-bottom: 1px solid #d7dde4;
+            color: #333333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .corse_btn {
+            display: flex;
+            align-items: center;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            border-left: 1px solid #EDEDED;
+            color: #FFF;
+            padding-left: 10px;
+        }
+
+        .orse_con {
+            color: #000;
+            border: 0;
+        }
+
+        .orse_con>p {
+            height: 100%;
+        }
+
+        .box_singal {
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(160, 160, 224, 0.3);
+        }
+        .selet {
+            height: 100%;
+            width: 15%;
+        }
+
+        .selet>select {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            border: 0;
+            border-left: 1px solid rgb(29, 8, 8);
+            outline: none;
+            font-weight: bold;
+            color: rgb(54, 45, 45);
+        }
+        .option{
+            appearance: none;
+            background: rgba(0, 0, 0, 0);
+            height: 20px;
+            border: 1px solid #000;
+        }
+        .box_change{
+            width: 520px;
+            height: 330px;
+            background: rgba(255, 255, 255, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .box_c{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .redio_t{
+            width: 40%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .yonghu_cha{
+            width: 30%;
+            height: 40px;
+            background: #333333;
+            color: #fff;
+            font-family: fontKai;
+            margin: 20px 0 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+    </style>
+
+    <div id="app">
+        <div class="layout">
+            <Row type="flex">
+                <i-col span="5" class="layout-menu-left">
+                    <Menu active-key="1-2" theme="dark" width="auto" :open-keys="['1']">
+                        <div class="layout-logo-left"></div>
+                        <Submenu key="1">
+                            <template slot="title">
+                                <Icon type="ios-navigate"></Icon>
+                                用户管理
+                            </template>
+                            <Menu-item key="1-1" @click='changeTitle(0,"用户管理","登陆用户")'>登陆用户</Menu-item>
+                            <Menu-item key="1-2" @click='changeTitle(1,"用户管理","学生信息")'>学生信息</Menu-item>
+                            <Menu-item key="1-3" @click='changeTitle(2,"用户管理","教师信息")'>教师信息</Menu-item>
+                            <Menu-item key="1-4" @click='changeTitle(3,"用户管理","修改密码")'>修改密码</Menu-item>
+                        </Submenu>
+                        <Submenu key="2">
+                            <template slot="title">
+                                <Icon type="ios-keypad"></Icon>
+                                课程管理
+                            </template>
+                            <Menu-item key="2-1" @click='changeTitle(4,"课程管理","课程信息")'>课程信息</Menu-item>
+                            <Menu-item key="2-2" @click='changeTitle(5,"课程管理","选课管理")'>选课管理</Menu-item>
+                        </Submenu>
+                        <Submenu key="3">
+                            <template slot="title">
+                                <Icon type="ios-analytics"></Icon>
+                                成绩
+                            </template>
+                            <Menu-item key="3-1" @click='changeTitle(6,"成绩","学生成绩")'>学生成绩</Menu-item>
+                        </Submenu>
+                    </Menu>
+                </i-col>
+                <i-col span="19">
+                    <div class="layout-header"></div>
+                    <div class="layout-breadcrumb">
+                        <Breadcrumb>
+                            <Breadcrumb-item href="#">首页</Breadcrumb-item>
+                            <Breadcrumb-item href="#">应用中心</Breadcrumb-item>
+                            <Breadcrumb-item>某应用</Breadcrumb-item>
+                        </Breadcrumb>
+                    </div>
+                    <div class="layout-content">
+                        <div class="layout-content-main">
+                            <div v-show="flag===0" class="box_yonghu">
+                                <div class="box_title_yonghu">
+                                    <div class="yonghu_item">用户名</div>
+                                    <div class="yonghu_item">学号</div>
+                                    <div class="yonghu_item">用户类型</div>
+                                    <div class="yonghu_item ">操作</div>
+                                </div>
+                                <div class="box_title_yonghu box_content" v-for="(index,item) in yonghu">
+                                    <div class="content_yonghu">{{item.name}}</div>
+                                    <div class="content_yonghu">{{item.id}}</div>
+                                    <div class="content_yonghu">{{item.type}}</div>
+                                    <div class="yonghu_item_cz">
+                                        <div class="yh_change" @click="sure='sure'">修改</div>
+                                        <div class="yh_splice">删除</div>
+                                    </div>
+                                </div>
+                                <div class="corse_btn orse_con fenye">
+                                    <p class="syy" style="height: 20px;">上一页</p>
+                                    <span>1/</span>
+                                    <span>5</span>
+                                    <p class="xyy" style="height: 20px;">下一页</p>
+                                </div>
+                            </div>
+                            <div v-show="flag===1" class="box_singal">
+                                    <div style="width: 100%;height: 100%;">
+                                            <div class="search_box kecheng">
+                                                <input type="text" placeholder="请输入学号/姓名！">
+                                                <div class="selet">
+                                                    <select name="" id="">
+                                                        <option value="课程名" class="option">学号</option>
+                                                        <option value="学号" class="option">姓名</option>
+                                                        <option value="班级" class="option">班级</option>
+                                                    </select>
+                                                </div>
+                                                <div class="sousuo kecheng_img" @click='search(this)'>
+                                                    <img src="sousuo.png"" alt="">
+                                                </div>
+                                            </div>
+                        <div class=" box_title">
+                                            <div class="titleWid">学号</div>
+                                            <div class="titleWid">姓名</div>
+                                            <div class="titleWid">年龄</div>
+                                            <div class="titleWid">班级</div>
+                                            <div class="titleWid">操作</div>
+                                        </div>
+                                        <div class=" box_title title_id" v-for="(index,item) in stuList">
+                                            <p class="title_id titleWid">{{item.id}}</p>
+                                            <p class="title_id titleWid">{{item.name}}</p>
+                                            <p class="title_id titleWid">{{item.age}}</p>
+                                            <p class="title_id titleWid">{{item.class}}</p>
+                                            <div class="title_id titleWid qdxk_er">
+                                                <div class="qdxk" @click='go(index)'>修改信息</div>
+                                            </div>
+
+                                        </div>
+                                        <div class="corse_btn orse_con fenye">
+                                            <p class="syy" style="height: 20px;">上一页</p>
+                                            <span>1/</span>
+                                            <span>5</span>
+                                            <p class="xyy" style="height: 20px;">下一页</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-show="flag===2" class="box_singal">
+                                        <div style="width: 100%;height: 100%;">
+                                                <div class="search_box kecheng">
+                                                    <input type="text" placeholder="请输入学号/姓名！">
+                                                    <div class="selet">
+                                                        <select name="" id="">
+                                                            <option value="课程名" class="option">工号</option>
+                                                            <option value="学号" class="option">姓名</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="sousuo kecheng_img" @click='search(this)'>
+                                                        <img src="sousuo.png"" alt="">
+                                                    </div>
+                                                </div>
+                            <div class=" box_title">
+                                                <div class="titleWid">工号</div>
+                                                <div class="titleWid">姓名</div>
+                                                <div class="titleWid">年龄</div>
+                                                <div class="titleWid">职称</div>
+                                                <div class="titleWid">操作</div>
+                                            </div>
+                                            <div class=" box_title title_id" v-for="(index,item) in stuList">
+                                                <p class="title_id titleWid">{{item.id}}</p>
+                                                <p class="title_id titleWid">{{item.name}}</p>
+                                                <p class="title_id titleWid">{{item.age}}</p>
+                                                <p class="title_id titleWid">副教</p>
+                                                <div class="title_id titleWid qdxk_er">
+                                                    <div class="qdxk" @click='go(index)'>修改信息</div>
+                                                </div>
+    
+                                            </div>
+                                            <div class="corse_btn orse_con fenye">
+                                                <p class="syy" style="height: 20px;">上一页</p>
+                                                <span>1/</span>
+                                                <span>5</span>
+                                                <p class="xyy" style="height: 20px;">下一页</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-show="flag===3" class="box_singal">
+                                        <div class="box_change">
+                                            <div class="box_c" v-show="i===0">
+                                            <div class="singal_name" style="width: 60%;">
+                                                <div class=" singal_name_title">
+                                                    用户名
+                                                </div>
+                                                <input type="text" class="name_content" :value="czs[indexinfo].id" v-model="chang.id">
+                                            </div>
+                                            <div class="singal_name" style="width: 60%;">
+                                                <div class=" singal_name_title">
+                                                    密码
+                                                </div>
+                                                <input type="text" class="name_content" :value="czs[indexinfo].id" v-model="chang.id">
+                                            </div>
+                                            <div class="redio_t">
+                                            <div class="box_radio" v-for="(n,item) in radios" :key="n">
+                                                    <input type="radio" name="" :id="item.title" value="学生" :checked='item.ischecked'>
+                                                    <label :for="item.title" @click='radioChoo(n)'></label>
+                                                    <p class="radio_name">{{item.name}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="yonghu_cha" @click="i=1">查找</div>
+                                        </div>
+                                        <div class="box_c" v-show="i===1">
+                                                <div class="singal_name" style="width: 70%;">
+                                                    <div class=" singal_name_title">
+                                                        新密码
+                                                    </div>
+                                                    <input type="text" class="name_content" :value="czs[indexinfo].id" v-model="chang.id">
+                                                </div>
+                                                <div class="singal_name" style="width: 70%;">
+                                                    <div class=" singal_name_title">
+                                                        确定密码
+                                                    </div>
+                                                    <input type="text" class="name_content" :value="czs[indexinfo].id" v-model="chang.id">
+                                                </div>
+                                                <div style="width: 50%;display: flex;justify-content: space-between;">
+                                                <div class="yonghu_cha" style="background:crimson ;">修改</div>
+                                                <div class="yonghu_cha" @click="i=0">取消</div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div v-show="flag===4" class="box_yonghu">
+                                        <div class="search_box kecheng">
+                                                <input type="text" placeholder="请输入学号/姓名！">
+                                                <div class="selet">
+                                                    <select name="" id="">
+                                                        <option value="课程名" class="option">课程名</option>
+                                                        <option value="学号" class="option">课程号</option>
+                                                        <option value="班级" class="option">任课老师</option>
+                                                    </select>
+                                                </div>
+                                                <div class="sousuo kecheng_img" @click='search(this)'>
+                                                    <img src="sousuo.png"" alt="">
+                                                </div>
+                                            </div>
+                                    <div class="box_title_yonghu">
+                                        <div class="yonghu_item">课程名</div>
+                                        <div class="yonghu_item">课程号</div>
+                                        <div class="yonghu_item">任课老师</div>
+                                        <div class="yonghu_item ">操作</div>
+                                    </div>
+                                    <div class="box_title_yonghu box_content" v-for="(index,item) in teaList">
+                                        <div class="content_yonghu">{{item.name}}</div>
+                                        <div class="content_yonghu">{{item.id}}</div>
+                                        <div class="content_yonghu">{{item.tea}}</div>
+                                        <div class="yonghu_item_cz">
+                                            <div class="yh_change">修改</div>
+                                            <div class="yh_splice">删除</div>
+                                        </div>
+                                    </div>
+                                    <div class="corse_btn orse_con fenye">
+                                        <p class="syy" style="height: 20px;">上一页</p>
+                                        <span>1/</span>
+                                        <span>5</span>
+                                        <p class="xyy" style="height: 20px;">下一页</p>
+                                    </div>
+                                </div>
+                                <div v-show="flag===5" class="box_yonghu">
+                                        <div class="box_title_yonghu">
+                                            <div class="yonghu_item">学号</div>
+                                            <div class="yonghu_item">班级</div>
+                                            <div class="yonghu_item">任课教师</div>
+                                            <div class="yonghu_item ">课程名</div>
+                                        </div>
+                                        <div class="box_title_yonghu box_content" v-for="(index,item) in courseList">
+                                            <div class="content_yonghu">{{item.id}}</div>
+                                            <div class="content_yonghu">{{item.class}}</div>
+                                            <div class="content_yonghu">{{item.tea}}</div>
+                                            <div class="content_yonghu">{{item.course}}</div>
+                                            
+                                        </div>
+                                        <div class="corse_btn orse_con fenye">
+                                            <p class="syy" style="height: 20px;">上一页</p>
+                                            <span>1/</span>
+                                            <span>5</span>
+                                            <p class="xyy" style="height: 20px;">下一页</p>
+                                        </div>
+                                    </div>
+                                    <div v-show="flag===6" class="box_singal">
+                                        <div style="width: 100%;height: 100%;">
+                                                <div class="search_box kecheng">
+                                                    <input type="text" placeholder="请输入学号/姓名！">
+                                                    <div class="selet">
+                                                        <select name="" id="">
+                                                            <option value="学号" class="option">学号</option>
+                                                            <option value="姓名" class="option">姓名</option>
+                                                            <option value="教师" class="option">教师</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="sousuo kecheng_img" @click='search(this)'>
+                                                        <img src="sousuo.png"" alt="">
+                                                    </div>
+                                                </div>
+                            <div class=" box_title">
+                                                <div class="titleWid">学号</div>
+                                                <div class="titleWid">姓名</div>
+                                                <div class="titleWid">任课教师</div>
+                                                <div class="titleWid">成绩</div>
+                                                <div class="titleWid">操作</div>
+                                            </div>
+                                            <div class=" box_title title_id" v-for="(index,item) in stuList">
+                                                <p class="title_id titleWid">{{item.id}}</p>
+                                                <p class="title_id titleWid">{{item.name}}</p>
+                                                <p class="title_id titleWid">{{item.age}}</p>
+                                                <p class="title_id titleWid">100</p>
+                                                <div class="title_id titleWid qdxk_er">
+                                                    <div class="qdxk">修改信息</div>
+                                                </div>
+    
+                                            </div>
+                                            <div class="corse_btn orse_con fenye">
+                                                <p class="syy" style="height: 20px;">上一页</p>
+                                                <span>1/</span>
+                                                <span>5</span>
+                                                <p class="xyy" style="height: 20px;">下一页</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                </i-col>
+            </Row>
+        </div>
+        <div :class="sure">
+            <div class="box_sure">
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        用户名
+                    </div>
+                    <input type="text" class="name_content" :value="czs[indexinfo].id" v-model="chang.id">
+                </div>
+                <div class="singal_name" style="width: 60%;">
+                    <div class=" singal_name_title">
+                        学号
+                    </div>
+                    <input type="text" class="name_content" :value="czs[indexinfo].id" v-model="chang.id">
+                </div>
+                <div class="radio_class">
+                    <div class="box_radio" v-for="(n,item) in radios" :key="n">
+                        <input type="radio" name="" :id="item.title" value="学生" :checked='item.ischecked'>
+                        <label :for="item.title" @click='radioChoo(n)'></label>
+                        <p class="radio_name">{{item.name}}</p>
+                    </div>
+                </div>
+                <div class="sure_con">
+                    <div class="sure_qd" @click='changeInfo()'>确定</div>
+                    <div class="sure_qx" @click='quxiao'>取消</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+
+            data() {
+                return {
+                    flag: 6,
+                    i:0,
+                    sure: 'sure_',
+                    courseList:[
+                        {
+                            id:'20147894',
+                            course:'软件测试',
+                            tea:'马克',
+                            class:'软件17-8'
+                        },
+                        {
+                            id:'20147894',
+                            course:'软件测试',
+                            tea:'马克',
+                            class:'软件17-8'
+                        },
+                        {
+                            id:'20147894',
+                            course:'软件测试',
+                            tea:'马克',
+                            class:'软件17-8'
+                        },
+                        {
+                            id:'20147894',
+                            course:'软件测试',
+                            tea:'马克',
+                            class:'软件17-8'
+                        },
+                        {
+                            id:'20147894',
+                            course:'软件测试',
+                            tea:'马克',
+                            class:'软件17-8'
+                        },
+                        {
+                            id:'20147894',
+                            course:'软件测试',
+                            tea:'马克',
+                            class:'软件17-8'
+                        },
+                        {
+                            id:'20147894',
+                            course:'软件测试',
+                            tea:'马克',
+                            class:'软件17-8'
+                        },
+                        {
+                            id:'20147894',
+                            course:'软件测试',
+                            tea:'马克',
+                            class:'软件17-8'
+                        },
+                        {
+                            id:'20147894',
+                            course:'软件测试',
+                            tea:'马克',
+                            class:'软件17-8'
+                        },
+                        {
+                            id:'20147894',
+                            course:'软件测试',
+                            tea:'马克',
+                            class:'软件17-8'
+                        },
+                    ],
+                    teaList:[
+                        
+                        {
+                            name:'软件测试',
+                            id:'12349885466',
+                            tea:'马克'
+                        },
+                        {
+                            name:'软件测试',
+                            id:'12349885466',
+                            tea:'马克'
+                        },
+                        {
+                            name:'软件测试',
+                            id:'12349885466',
+                            tea:'马克'
+                        },
+                        {
+                            name:'软件测试',
+                            id:'12349885466',
+                            tea:'马克'
+                        },
+                        {
+                            name:'软件测试',
+                            id:'12349885466',
+                            tea:'马克'
+                        },
+                        {
+                            name:'软件测试',
+                            id:'12349885466',
+                            tea:'马克'
+                        },
+                        {
+                            name:'软件测试',
+                            id:'12349885466',
+                            tea:'马克'
+                        },
+                        {
+                            name:'软件测试',
+                            id:'12349885466',
+                            tea:'马克'
+                        },
+                        {
+                            name:'软件测试',
+                            id:'12349885466',
+                            tea:'马克'
+                        },
+                    ],
+                    stuList:[
+                        {
+                            id:'20198764',
+                            name:'马玉',
+                            age:'18',
+                            class:'软件17-4'
+                        },
+                        {
+                            id:'20198764',
+                            name:'马玉',
+                            age:'18',
+                            class:'软件17-4'
+                        },
+                        {
+                            id:'20198764',
+                            name:'马玉',
+                            age:'18',
+                            class:'软件17-4'
+                        },
+                        {
+                            id:'20198764',
+                            name:'马玉',
+                            age:'18',
+                            class:'软件17-4'
+                        },
+                        {
+                            id:'20198764',
+                            name:'马玉',
+                            age:'18',
+                            class:'软件17-4'
+                        },
+                        {
+                            id:'20198764',
+                            name:'马玉',
+                            age:'18',
+                            class:'软件17-4'
+                        },
+                        {
+                            id:'20198764',
+                            name:'马玉',
+                            age:'18',
+                            class:'软件17-4'
+                        },
+                        {
+                            id:'20198764',
+                            name:'马玉',
+                            age:'18',
+                            class:'软件17-4'
+                        },
+                    ],
+                    yonghu: [
+
+                        {
+                            name: '张三',
+                            id: '20173754',
+                            type: '学生'
+                        },
+                        {
+                            name: '张三',
+                            id: '20173754',
+                            type: '学生'
+                        },
+                        {
+                            name: '张三',
+                            id: '20173754',
+                            type: '学生'
+                        },
+                        {
+                            name: '张三',
+                            id: '20173754',
+                            type: '学生'
+                        },
+                        {
+                            name: '张三',
+                            id: '20173754',
+                            type: '学生'
+                        },
+                        {
+                            name: '张三',
+                            id: '20173754',
+                            type: '学生'
+                        },
+                        {
+                            name: '张三',
+                            id: '20173754',
+                            type: '学生'
+                        },
+                        {
+                            name: '张三',
+                            id: '20173754',
+                            type: '学生'
+                        },
+                        {
+                            name: '张三',
+                            id: '20173754',
+                            type: '学生'
+                        },
+                        {
+                            name: '张三',
+                            id: '20173754',
+                            type: '学生'
+                        },
+                    ],
+                    radios: [
+                        {
+                            name: '学生',
+                            title: 'stu',
+                            ischecked: true
+                        },
+                        {
+                            name: '老师',
+                            title: 'tea',
+                            ischecked: false
+                        }
+                    ],
+                }
+            },
+            methods: {
+                radioChoo(index) {
+                    // kk().then(res => {
+                    //     // this[index]
+                    // })
+                    this.radios.forEach((element, i) => {
+                        if (index == i) {
+                            element.ischecked = true
+                        } else {
+                            element.ischecked = false
+                        }
+                    });
+                },
+                changeInfo(index) {
+                    this.sure = "sure_";
+                },
+                quxiao() {
+                    this.sure = 'sure_';
+
+                },
+                changeTitle(m, n, q) {
+                        this.flag = m
+                        this.title = n
+                        this.name = q
+                    }
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http//mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace创建命名空间 -->
+<mapper namespace="com.onlineclass.dao.UserDao">
+<!--用户登录 -->
+<select id="userLogin" resultType="User">
+	SELECT * from user where user_name=#{user_name} and user_password=#{user_password} and user_type=#{user_type}
+</select>
+
+<!-- 用户注册 -->
+<insert id="userRegister" parameterType="User">
+INSERT into user(user_name,user_password,user_type) values(#{user_name},#{user_password},#{user_type})
+</insert>
+
+<!-- 判断用户是否已注册 -->
+<select id="useConflict" resultType="User">
+SELECT * from user where user_name=#{username}
+</select>
+
+<!-- 学生用户注册 -->
+<insert id="StudentRegister" parameterType="Student">
+INSERT into student(student_name,student_sno,student_age,student_data,student_phone,student_address,student_class) 
+values(#{student_name},#{student_sno},#{student_age},#{student_data},#{student_phone},#{student_address},#{student_class})
+</insert>
+
+<!-- 学生用户查询 -->
+<select id="SelStudent" resultType="Student">
+SELECT * from student where 1=1 and student_sno=#{studentSno} and student_phone=#{studentTelphone}
+</select>
+
+<!-- 登录用户修改 -->
+<update id="UpdataUser" parameterType="User">
+UPDATE user set user_password=#{user_password},user_type=#{user_type} where user_name=#{user_name}
+</update>
+
+<!-- 用户查询 -->
+<select id="SelUser" resultType="User">
+SELECT * from user where 1=1
+<if test="user_name!=''and user_name!=null">
+and user_name=#{user_name}
+</if>
+</select>
+
+
+<!-- 用户名、密码、类型查询 -->
+<select id="SelAllUser" resultType="User">
+SELECT * from user where 1=1
+and user_name=#{user_name} and user_password=#{user_password} and user_type=#{user_type}
+</select>
+</mapper>

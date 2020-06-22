@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登陆</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://at.alicdn.com/t/font_1296423_92fclenj85a.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.bootcss.com/qs/6.6.0/qs.min.js"></script>
+
+</head>
+
+<body>
+    <style scoped>
+        body,
+        html,
+        #app {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box_both {
+            width: 100%;
+            height: 100vh;
+            background-image: url('../img/loginbg.jpg');
+            background-size: 100% 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box_form {
+            width: 35%;
+            height: 55%;
+            background: rgba(250, 224, 230, 0.3);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form_user {
+            width: 70%;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            background: rgba(250, 224, 230, 0);
+            border-bottom: 1px solid #fff;
+            margin: 20px 0 0 0;
+        }
+
+        .form_user>input {
+            border: 0;
+            width: 60%;
+            height: 100%;
+            background: rgba(250, 224, 230, 0);
+            outline: none;
+            margin: 0 0 0 10px;
+            color: #F0FFFF;
+            font-family: myfont;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .form_user>input::placeholder {
+            color: #fff;
+            font-size: 14px;
+            font-family: myfont;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            margin: 0 0 3px 0;
+        }
+
+        .radio_class {
+            display: flex;
+            width: 70%;
+            justify-content: space-around;
+            height: 30px;
+            margin: 20px 0 0 0;
+        }
+
+        .title {
+            font-size: 30px;
+            color: #CD69C9;
+            font-family: myfont;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        @font-face {
+            font-family: myfont;
+            src: url('../font/kai.ttf')
+        }
+
+        .box_radio {
+            display: flex;
+            align-items: center;
+            font-family: myfont;
+            color: #fff;
+        }
+
+        .box_radio input {
+            display: none;
+        }
+
+        .box_radio input+label {
+            display: block;
+            width: 15px;
+            height: 15px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+        }
+
+        .box_radio input:checked+label {
+            content: url('../img/d.png');
+        }
+
+        .radio_name {
+            margin: 0 0 0 5px;
+        }
+
+        .box_btn {
+            width: 70%;
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0 0 0;
+        }
+
+        .subit {
+            width: 40%;
+            height: 40px;
+            background: rgba(120, 197, 233, 0.7);
+            font-family: myfont;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            cursor: default;
+            border-radius: 5px;
+        }
+
+        .retu {
+            width: 40%;
+            height: 40px;
+            color: rgb(128, 120, 233);
+            font-family: myfont;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.7);
+            cursor: default;
+            border-radius: 5px;
+        }
+
+        .loss_pas {
+            font-family: myfont;
+            color: #fff;
+            width: 70%;
+            font-size: 15px;
+            display: flex;
+            justify-content: flex-end;
+            cursor: default;
+        }
+
+        .box_loss {
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            visibility: visible
+        }
+
+        .box_loss_ {
+            width: 0;
+            height: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: -2;
+            position: absolute;
+            top: 0;
+            left: 0;
+            visibility: hidden
+        }
+
+        .loss_form {
+            width: 30%;
+            height: 40%;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            animation: wj 0.1s;
+        }
+
+        @keyframes wj {
+            from {
+                width: 0;
+                height: 0;
+
+            }
+
+            to {
+                width: 30%;
+                height: 40%;
+                background: #fff;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+            }
+        }
+
+        .return_psw {
+            font-size: 30px;
+            color: #3B3B3B;
+            font-family: myfont;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .box_return {
+            height: 30px;
+            width: 70%;
+            display: flex;
+            align-items: center;
+            font-family: myfont;
+            font-weight: bold;
+            border-bottom: 1px solid #333333;
+            margin: 20px 0 0 0;
+        }
+
+        .return_con {
+            outline: none;
+            border: 0;
+            font-family: myfont;
+            font-weight: bold;
+            margin: 0 0 0 10px;
+        }
+
+        .re {
+            margin: 0 0 3px 15px;
+        }
+
+        .er {
+            border: 1px solid rgba(120, 197, 233, 0.7);
+
+        }
+
+        .sub_er {
+            margin: 30px 0 0 0;
+        }
+
+        .form_fir {
+            margin: 0 0 3px 10px;
+        }
+
+        .box_verifi {
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            position: absolute;
+            top: 0;
+            left: 0;
+            visibility: visible;
+        }
+        .box_verifi_{
+            width: 0;
+            height: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: -1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            visibility: hidden
+        }
+
+        .verifi_form {
+            width: 30%;
+            height: 40%;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            animation: wj 0.1s;
+        }
+
+        .toregist {
+            color: rgb(233, 233, 241);
+            font-weight: bold;
+        }
+        @media screen and (max-width: 1080px) {
+    		.box_form,.loss_form,.verifi_form{
+    			width:90%;
+    		}
+		}
+    </style>
+    <div id="app">
+        <div class="box_both">
+            <div class="box_form">
+                <div class="title">用户登陆</div>
+                <div class="form_user">
+                    <svg class="icon form_fir" aria-hidden="true">
+                        <use xlink:href="#icon-yonghu"></use>
+                    </svg>
+                    <input type="text" placeholder="请输入用户名" v-model='userName'>
+                </div>
+                <div class="form_user">
+                    <svg class="icon form_fir" aria-hidden="true">
+                        <use xlink:href="#icon-mima"></use>
+                    </svg>
+                    <input type="password" placeholder="请输入密码" v-model='password'>
+                </div>
+                <div class="radio_class">
+                    <div class="box_radio" v-for="(item,n) in radios" :key="n">
+                        <input type="radio" name="" :id="item.title" value="学生" :checked='item.ischecked'>
+                        <label :for="item.title" @click='radioChoo(n)'></label>
+                        <p class="radio_name">{{item.name}}</p>
+                    </div>
+                </div>
+                <div class="box_btn">
+                    <div class="subit" @click="loginOn">登陆</div>
+                    <div class="retu">取消</div>
+                </div>
+                <div class="loss_pas">
+                    <p @click='box_loss="";box_verifi="box_verifi"' class="toregist">忘记密码？</p>
+                </div>
+
+            </div>
+
+        </div>
+        <div :class="box_loss">
+            <div class="loss_form">
+                <div class="return_psw">找回密码</div>
+                <div class="box_return">
+                    <svg class="icon re" aria-hidden="true">
+                        <use xlink:href="#icon-mima-copy"></use>
+                    </svg>
+                    <input type="password" class="return_con" placeholder="新密码" v-model="returnPws1">
+                </div>
+                <div class="box_return">
+                    <svg class="icon re" aria-hidden="true">
+                        <use xlink:href="#icon-mima-copy"></use>
+                    </svg>
+                    <input type="password" class="return_con" placeholder="确定新密码" v-model="returnPws">
+                </div>
+                <div class="box_btn sub_er">
+                    <div class="subit" @click='surePws()'>确定</div>
+                    <div class="retu er" @click='box_loss="box_loss_";box_both="box_both";box_verifi="box_verifi"'>取消</div>
+                </div>
+            </div>
+
+        </div>
+        <div :class="box_verifi">
+            <div class="verifi_form">
+                <div class="return_psw">手机验证</div>
+                <div class="box_return">
+                    <svg class="icon re" aria-hidden="true">
+                        <use xlink:href="#icon-yonghu-copy"></use>
+                    </svg>
+                    <input type="text" class="return_con" placeholder="用户名" v-model='retname'>
+                </div>
+                <div class="box_return">
+                    <svg class="icon re" aria-hidden="true">
+                        <use xlink:href="#icon-phone-copy"></use>
+                    </svg>
+                    <input type="text" class="return_con" placeholder="手机号" v-model='phone'>
+                </div>
+                <div class="box_btn sub_er">
+                    <div class="subit" @click='retpsw()'>确定</div>
+                    <div class="retu er" @click='box_loss="box_loss_";box_both="box_both";box_verifi="box_verifi_"'>取消</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                	retname:'',
+                	phone:'',
+                    radios: [
+                        {
+                            name: '学生',
+                            title: 'stu',
+                            ischecked: true
+                        },
+                        {
+                            name: '教师',
+                            title: 'tea',
+                            ischecked: false
+                        },
+                        {
+                            name: '管理员',
+                            title: 'man',
+                            ischecked: false
+
+                        }
+                    ],
+                    userName:'',
+                    password:'',
+                    usertype:'学生',
+                    flag: 0,
+                    box_loss: 'box_loss_',
+                    loss_form: '',
+                    box_verifi: 'box_verifi_',
+                    returnPws:'',
+                    returnPws1:''
+                }
+            },
+            methods: {
+                radioChoo(index) {
+                	
+                    this.radios.forEach((element, i) => {
+                        if (index == i) {
+                            element.ischecked = true
+                            this.usertype=element.name
+                        } else {
+                            element.ischecked = false
+                        }
+                    });
+                    
+                },
+                
+                //登录接口
+                loginOn() {
+                	axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/user/userLogin",
+                        transformRequest: [
+                          function(data) {
+                            // 对 data 进行任意转换处理
+                            return Qs.stringify(data);
+                          }
+                        ],
+                        data: {
+                        	userName: this.userName,
+                        	userPwd: this.password,
+                        	type:this.usertype
+                        }
+                      }).then(result => {
+                        // 注意 通过axios获取的数据，都在result.data中放着  
+                        if(result.data=="stu"){
+                        	 window.location.href="student"
+                        }else if(result.data=="tea"){
+                        	 window.location.href="teacher" 	 
+                        }
+                        else if(result.data=="admin"){
+                       	 window.location.href="admins"
+                       }
+                        else{
+                        	alert("登录失败");
+                        }
+                        
+                        })
+                        var localdata={
+                		userName: this.userName,
+                    	userPwd: this.password,
+                	}
+                	console.log(this.usertype)
+                        localStorage.setItem("userName", this.userName);
+                	localStorage.setItem("password", this.password);
+                },
+                retpsw() {
+                	
+                	axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/user/forgetPassword",
+                        transformRequest: [
+                          function(data) {
+                            // 对 data 进行任意转换处理
+                            return Qs.stringify(data);
+                          }
+                        ],
+                        data: {
+                        	studentSno: this.retname,
+                        	studentTelphone: this.phone,
+                        }
+                      }).then(result => {
+                        // 注意 通过axios获取的数据，都在result.data中放着
+                        console.log(result.data)
+                        if(result.data){
+                        	this.box_both="box_both";
+                        	this.box_loss="box_loss";
+                        	this.box_verifi="box_verifi_"
+                        }else{
+                        	alert("未查询到")
+                        }
+                        
+                        })
+      
+                },
+                
+                surePws(){
+                	axios({
+                        method: "post",
+                        changeOrigin: "true",
+                        url: "/user/updataPassword",
+                        transformRequest: [
+                          function(data) {
+                            // 对 data 进行任意转换处理
+                            return Qs.stringify(data);
+                          }
+                        ],
+                        data: {
+                        	userName: this.retname,
+                        	userPassword: this.returnPws,
+                        	usertype:"学生"
+                        }
+                      }).then(result => {
+                        // 注意 通过axios获取的数据，都在result.data中放着
+                        console.log(result.data)
+                        if(this.returnPws1==this.returnPws){
+                        	if(result.data){
+                        		alert("修改成功");
+                        		this.box_loss="box_loss_";
+                            	this.box_verifi="box_verifi_";
+                            	this.box_both="box_both"
+                            }
+                        }else{
+                        	alert("两个密码内容不一致")
+                        }
+                        
+                        })
+                	
+                }
+                
+            },
+            mounted() {
+            }
+        })
+    </script>
+</body>
+
+</html>
